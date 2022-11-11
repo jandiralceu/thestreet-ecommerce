@@ -6,7 +6,9 @@ const Signin = () => {
   const signWithGoogle = React.useCallback(() => {
     const authService = new AuthService(new AuthRepository());
 
-    authService.signInWithGoogle();
+    authService.signInWithGoogle().then((user) => {
+      console.log(user);
+    });
   }, []);
 
   return (

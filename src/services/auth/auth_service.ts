@@ -1,7 +1,8 @@
+import { User } from "../../models";
 import { IAuthRepository } from "../../repositories";
 
 export interface IAuthService {
-  signInWithGoogle(): Promise<void>;
+  signInWithGoogle(): Promise<User>;
 }
 
 export class AuthService implements IAuthService {
@@ -11,7 +12,7 @@ export class AuthService implements IAuthService {
     this.#authRepository = authRepository;
   }
 
-  async signInWithGoogle(): Promise<void> {
+  async signInWithGoogle(): Promise<User> {
     return this.#authRepository.signInWithGoogle();
   }
 }

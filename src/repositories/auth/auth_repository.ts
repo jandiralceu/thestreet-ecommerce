@@ -1,17 +1,17 @@
+import { User } from "../../models";
 import { signInWithGooglePopup } from "../../infra";
 
 export interface IAuthRepository {
-  signInWithGoogle(): Promise<void>;
+  signInWithGoogle(): Promise<User>;
 }
 
 export class AuthRepository implements IAuthRepository {
-  async signInWithGoogle(): Promise<void> {
+  async signInWithGoogle(): Promise<User> {
     try {
-        const response = await signInWithGooglePopup();
-
-        console.log(response);
+        return (await signInWithGooglePopup()).user;
     } catch (e) {
         console.log(e)
+        throw(e);
     }
   }
 }
