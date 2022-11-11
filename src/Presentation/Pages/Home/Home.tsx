@@ -1,6 +1,6 @@
 import './home.styles.scss';
 
-import { CategoryContainer, CategoryContainerProps } from "./Components";
+import { CategoryContainer, CategoryContainerProps } from "./components";
 
 const categories: CategoryContainerProps[] = [
     {

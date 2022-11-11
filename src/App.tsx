@@ -1,12 +1,12 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import HomePage from './Presentation/Pages/Home/Home';
-import ShopPage from './Presentation/Pages/Shop/Shop';
-import AuthPage from './Presentation/Pages/Auth/Auth';
-import PageNotFound from './Presentation/Pages/PageNotFound/page_not_found';
+import HomePage from './presentation/pages/home/home';
+import ShopPage from './presentation/pages/shop/shop';
+import AuthPage from './presentation/pages/auth/auth';
+import PageNotFound from './presentation/pages/page_not_found/page_not_found';
 
-import { Navbar } from './Presentation/Components';
+import { Navbar } from './presentation/components';
 
 function App() {
   return (
