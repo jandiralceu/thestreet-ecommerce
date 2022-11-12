@@ -1,12 +1,19 @@
+import "./main_layout.styles.scss";
 import { Link, Outlet } from "react-router-dom";
 
 const AuthMainLayout = () => {
   return (
-    <div>
-      <h2>Auth</h2>
-      <Link to="/">Home</Link>
-      <Outlet />
-    </div>
+    <section className="main-layout">
+      <div className="auth-container">
+        <div className="cover">
+          <Link to="/">Home</Link>
+        </div>
+        
+        <main>
+          <Outlet />
+        </main>
+      </div>
+    </section>
   );
 };
 
