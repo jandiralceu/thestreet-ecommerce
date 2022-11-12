@@ -11,7 +11,11 @@ const Button = styled(MuiButton)({
     color: '#000',
     textTransform: 'none',
     border: 'none',
-    fontSize: 12
+    fontSize: 12,
+
+    '&:hover': {
+      backgroundColor: 'transparent',
+    }
 });
 
 export const SocialButton = ({ children, ...props }: SocialButtonProps) => {
