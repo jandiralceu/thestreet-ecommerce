@@ -1,9 +1,7 @@
 import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-} from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import { User } from "../models";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -14,13 +12,34 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
-
 const firebaseApp = initializeApp(firebaseConfig);
 const googleProvider = new GoogleAuthProvider();
 
 googleProvider.setCustomParameters({
-    prompt: "select_account"
+  prompt: "select_account",
 });
 
 export const auth = getAuth(firebaseApp);
-export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+export const signInWithGooglePopup = () =>
+  signInWithPopup(auth, googleProvider);
+export const database = getFirestore();
+export const createUserDocumentFromAuth = async (user: User) => {
+  const userDocRef = doc(database, "users", user.uid);
+  const userSnapshot = await getDoc(userDocRef);
+
+  if (userSnapshot.exists()) return userDocRef;
+
+  const { displayName, email, photoURL } = user;
+  const createdAt = new Date();
+
+  try {
+    await setDoc(userDocRef, {
+      email,
+      photoURL,
+      createdAt,
+      displayName,
+    });
+  } catch (error: any) {
+    console.log(`error creating the user ${error?.message}`);
+  }
+};
