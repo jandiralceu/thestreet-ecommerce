@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useFormik } from "formik";
 import { EmailRounded as Email } from "@mui/icons-material";
 import { Box, Divider, Typography } from "@mui/material";
 
@@ -8,7 +9,7 @@ import { AuthService } from "../../../../services";
 import { SocialButton } from "../components";
 import { ReactComponent as GoogleLogo } from "../../../assets/images/google_logo.svg";
 
-import "./signin.styles.scss";
+import "./login.styles.scss";
 import {
   PasswordTextField,
   SubmitButton,
@@ -16,7 +17,9 @@ import {
 } from "../../../components";
 import { RouteName } from "../../../utils";
 
-const Signin = () => {
+import { loginFormValidation } from "./login.validation";
+
+const LoginPage = () => {
   const signWithGoogle = React.useCallback(() => {
     const authService = new AuthService(new AuthRepository());
 
@@ -24,6 +27,18 @@ const Signin = () => {
       console.log(user);
     });
   }, []);
+
+  const { handleSubmit, values, handleChange, handleBlur, touched, errors } =
+    useFormik({
+      initialValues: {
+        email: "",
+        password: "",
+      },
+      validationSchema: loginFormValidation(),
+      onSubmit: (values) => {
+        console.log(values);
+      },
+    });
 
   return (
     <section>
@@ -45,15 +60,27 @@ const Signin = () => {
 
       <Divider sx={{ marginTop: 3 }}>or</Divider>
 
-      <Box component="form" marginTop={4}>
+      <Box component="form" marginTop={4} onSubmit={handleSubmit}>
         <TextField
           id="email"
           label="Email"
           startAdornment={<Email sx={{ width: 18 }} />}
           placeholder="me@email.com"
+          onBlur={handleBlur}
+          onChange={handleChange}
+          error={touched.email && !!errors.email}
+          helperText={touched.email && errors.email}
         />
         <Box marginTop={1}>
-          <PasswordTextField id="password" label="Password" placeholder="Password" />
+          <PasswordTextField
+            id="password"
+            label="Password"
+            placeholder="Password"
+            onBlur={handleBlur}
+            onChange={handleChange}
+            error={touched.password && !!errors.password}
+            helperText={touched.password && errors.password}
+          />
         </Box>
 
         <Box
@@ -87,4 +114,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default LoginPage;
