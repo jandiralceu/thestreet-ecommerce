@@ -1,11 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { EmailRounded as Email } from "@mui/icons-material";
 import { Box, Divider, Typography } from "@mui/material";
 
-import { AuthRepository } from "../../../../repositories";
-import { AuthService } from "../../../../services";
 import { SocialButton } from "../components";
 
 import "./login.styles.scss";
@@ -18,10 +16,13 @@ import { RouteName } from "../../../utils";
 
 import { loginFormValidation } from "./login.validation";
 import { GoogleLogo } from "../../../components/svgs";
+import { useUserContext } from "../../../contexts";
 
-const authService = new AuthService(new AuthRepository());
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const { authService } = useUserContext();
+
   const { handleSubmit, values, handleChange, handleBlur, touched, errors, resetForm } =
     useFormik({
       initialValues: {
@@ -31,9 +32,10 @@ const LoginPage = () => {
       validationSchema: loginFormValidation(),
       onSubmit: async (values) => {
         try {
-          const response = await authService.login(values.email, values.password);
-          console.log(response);
+          await authService!.login(values.email, values.password);
           resetForm();
+
+          navigate(RouteName.home);
         } catch (error: any) {
           console.log(`error ${error?.message}`);
         }
@@ -53,8 +55,9 @@ const LoginPage = () => {
         <SocialButton
           onClick={async () => {
             try {
-              const response = await authService.loginWithGoogle();
-              console.log(response);
+              await authService!.loginWithGoogle();
+
+              navigate(RouteName.home);
             } catch(error: any) {
               console.log(`error ${error?.message}`);
             }

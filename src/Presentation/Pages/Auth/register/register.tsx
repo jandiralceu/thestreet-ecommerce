@@ -17,13 +17,12 @@ import "./register.styles.scss";
 import { RouteName } from "../../../utils";
 
 import { registrationFormValidation } from "./register.validation";
-import { AuthService } from "../../../../services";
-import { AuthRepository } from "../../../../repositories";
 import { GoogleLogo } from "../../../components/svgs";
-
-const authService = new AuthService(new AuthRepository());
+import { useUserContext } from "../../../contexts";
 
 const RegisterPage = () => {
+  const { authService } = useUserContext();
+
   const {
     handleSubmit,
     values,
@@ -43,7 +42,7 @@ const RegisterPage = () => {
     onSubmit: async (values) => {
       try {
         const { email, password, fullName } = values;
-        const response = await authService.registerWithEmailAndPassword(
+        const response = await authService!.registerWithEmailAndPassword(
           email,
           password,
           fullName
@@ -68,7 +67,7 @@ const RegisterPage = () => {
         <SocialButton
           onClick={async () => {
             try {
-              const response = await authService.loginWithGoogle();
+              const response = await authService!.loginWithGoogle();
               console.log(response);
             } catch (error: any) {
               console.log(`error ${error?.message}`);

@@ -1,16 +1,34 @@
 import { User } from "../../models";
-import { signInWithGooglePopup, createUserDocumentFromAuth, createAccountWithEmailAndPassword, signInWithEmailAndPassword } from "../../infra";
+import {
+  signInWithGooglePopup,
+  createUserDocumentFromAuth,
+  createAccountWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+  signOut,
+} from "../../infra";
 
 export interface IAuthRepository {
+  logout(): Promise<void>;
   loginWithGoogle(): Promise<User>;
   login(email: string, password: string): Promise<User>;
-  registerWithEmailAndPassword(email: string, password: string, name: string): Promise<User>;
+  registerWithEmailAndPassword(
+    email: string,
+    password: string,
+    name: string
+  ): Promise<User>;
 }
 
 export class AuthRepository implements IAuthRepository {
-  async registerWithEmailAndPassword(email: string, password: string, name: string): Promise<User> {
+  async registerWithEmailAndPassword(
+    email: string,
+    password: string,
+    name: string
+  ): Promise<User> {
     try {
       const response = await createAccountWithEmailAndPassword(email, password);
+
+      await updateProfile(response, { displayName: name });
 
       await createUserDocumentFromAuth({
         ...response,
@@ -39,6 +57,14 @@ export class AuthRepository implements IAuthRepository {
       const response = await signInWithEmailAndPassword(email, password);
 
       return response;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async logout(): Promise<void> {
+    try {
+      await signOut();
     } catch (e) {
       throw e;
     }

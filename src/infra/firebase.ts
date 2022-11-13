@@ -4,7 +4,10 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
+  updateProfile,
+  signOut as signOutFirebase,
   signInWithEmailAndPassword as signInWithEmailAndPasswordFirebase,
+  onAuthStateChanged,
 } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { User } from "../models";
@@ -68,3 +71,9 @@ export const signInWithEmailAndPassword = async (email: string, password: string
     throw error;
   }
 }
+
+export const signOut = () => signOutFirebase(auth);
+
+export const onAuthStateChangedListener = (callback: any) => onAuthStateChanged(auth, callback);
+
+export { updateProfile };

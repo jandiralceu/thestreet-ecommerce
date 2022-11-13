@@ -54,7 +54,6 @@ const AuthMainLayout = () => {
             <Link to={RouteName.home}>
               <Typography variant="h1">Awesome</Typography>
             </Link>
-            <Typography marginTop={2} component="p" variant="body2">Download our app, and get all products in your hands.</Typography>
           </Box>
 
 
