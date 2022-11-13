@@ -15,9 +15,20 @@ import theme from "../../../core/theme";
 
 type TextFieldProps = {
   label: string;
+  value?: any;
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;
-} & Pick<MuiTextFieldProps, "placeholder" | "type" | "id">;
+} & Pick<
+  MuiTextFieldProps,
+  | "placeholder"
+  | "type"
+  | "id"
+  | "onBlur"
+  | "onChange"
+  | "name"
+  | "error"
+  | "helperText"
+>;
 
 const StyledTextField = styled("label")(({ theme: Theme }) => ({
   height: "48px",
@@ -29,19 +40,24 @@ const StyledTextField = styled("label")(({ theme: Theme }) => ({
   alignItems: "center",
   color: theme.typography.caption.color,
 
+  "&.error": {
+    backgroundColor: `${theme.palette.error.light}20`,
+    border: `1px solid ${theme.palette.error.dark}`
+  },
+
   "& .label": {
-    fontSize: "0.6em",
     margin: 0,
     padding: 0,
+    fontSize: "0.6em",
     fontWeight: theme.typography.fontWeightMedium,
   },
 
   "& input": {
-    width: "100%",
     padding: 0,
+    width: "100%",
     border: "none",
-    backgroundColor: "transparent",
     outline: "none",
+    backgroundColor: "transparent",
   },
 }));
 
@@ -50,10 +66,12 @@ export const TextField = ({
   startAdornment,
   endAdornment,
   label,
+  error,
+  helperText,
   ...props
 }: TextFieldProps) => {
   return (
-    <StyledTextField htmlFor={id}>
+    <StyledTextField htmlFor={id} className={[error && 'error'].join(',')}>
       {startAdornment}
       <Box
         width="100%"
@@ -63,7 +81,7 @@ export const TextField = ({
         flexDirection="column"
       >
         {label && <span className="label">{label}</span>}
-        <input {...props} id={id} />
+        <input id={id} {...props} />
       </Box>
       {endAdornment}
     </StyledTextField>
@@ -73,12 +91,14 @@ export const TextField = ({
 export const PasswordTextField = ({
   label,
   id,
+  error,
+  helperText,
   ...props
 }: Omit<TextFieldProps, "startAdornment" | "endAdornment" | "type">) => {
   const [visibility, setVisibility] = React.useState(false);
 
   return (
-    <StyledTextField htmlFor={id}>
+    <StyledTextField htmlFor={id} {...(error && {className: 'error'})}>
       <Lock sx={{ width: 20 }} />
       <Box
         width="100%"
@@ -88,10 +108,17 @@ export const PasswordTextField = ({
         flexDirection="column"
       >
         {label && <span className="label">{label}</span>}
-        <input {...props} id={id} />
+        <input id={id} {...props} />
       </Box>
-      <IconButton onClick={() => setVisibility(!visibility)} sx={{ width: 28, height: 28, }}>
-        {visibility ? <VisibilityOff sx={{ width: 20 }} /> : <Visibility sx={{ width: 20 }} />}
+      <IconButton
+        onClick={() => setVisibility(!visibility)}
+        sx={{ width: 28, height: 28 }}
+      >
+        {visibility ? (
+          <VisibilityOff sx={{ width: 20 }} />
+        ) : (
+          <Visibility sx={{ width: 20 }} />
+        )}
       </IconButton>
     </StyledTextField>
   );

@@ -1,5 +1,6 @@
 import { Box, Divider, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useFormik } from "formik";
 import { EmailRounded as Email } from "@mui/icons-material";
 
 import { ReactComponent as GoogleLogo } from "../../../assets/images/google_logo.svg";
@@ -14,7 +15,29 @@ import {
 import "./register.styles.scss";
 import { RouteName } from "../../../utils";
 
+import { registrationFormValidation } from "./register.validation";
+
 const RegisterPage = () => {
+  const {
+    handleSubmit,
+    values,
+    handleChange,
+    handleBlur,
+    touched,
+    errors,
+  } = useFormik({
+    initialValues: {
+      fullName: "",
+      email: "",
+      password: "",
+      repeat_password: "",
+    },
+    validationSchema: registrationFormValidation(),
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
+
   return (
     <section>
       <Typography variant="h1">Register into CRWN</Typography>
@@ -31,28 +54,54 @@ const RegisterPage = () => {
 
       <Divider sx={{ marginTop: 3 }}>or</Divider>
 
-      <Box component="form" marginTop={4}>
+      <Box component="form" marginTop={4} onSubmit={handleSubmit}>
         <TextField
-          startAdornment={<Email sx={{ width: 18 }} />}
+          id="fullName"
           label="Your name"
+          value={values.fullName}
+          onBlur={handleBlur}
+          onChange={handleChange}
           placeholder="John Doe"
+          error={touched.fullName && !!errors.fullName}
+          startAdornment={<Email sx={{ width: 18 }} />}
+          helperText={touched.fullName && errors.fullName}
         />
 
         <Box marginTop={1}>
           <TextField
             id="email"
             label="Email"
-            startAdornment={<Email sx={{ width: 18 }} />}
             placeholder="me@email.com"
+            onBlur={handleBlur}
+            onChange={handleChange}
+            error={touched.email && !!errors.email}
+            helperText={touched.email && errors.email}
+            startAdornment={<Email sx={{ width: 18 }} />}
           />
         </Box>
 
         <Box marginTop={1}>
-          <PasswordTextField id="password" label="Password" placeholder="Password" />
+          <PasswordTextField
+            id="password"
+            label="Password"
+            placeholder="Password"
+            onBlur={handleBlur}
+            onChange={handleChange}
+            error={touched.password && !!errors.password}
+            helperText={touched.password && errors.password}
+          />
         </Box>
 
         <Box marginTop={1}>
-          <PasswordTextField id="repeat_password" label="Repeat Password" placeholder="Password" />
+          <PasswordTextField
+            id="repeat_password"
+            onBlur={handleBlur}
+            onChange={handleChange}
+            error={touched.repeat_password && !!errors.repeat_password}
+            helperText={touched.repeat_password && errors.repeat_password}
+            label="Repeat Password"
+            placeholder="Password"
+          />
         </Box>
 
         <Box marginTop={2} marginBottom={3}>
