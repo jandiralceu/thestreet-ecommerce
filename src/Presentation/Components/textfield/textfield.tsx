@@ -42,7 +42,7 @@ const StyledTextField = styled("label")(({ theme: Theme }) => ({
 
   "&.error": {
     backgroundColor: `${theme.palette.error.light}20`,
-    border: `1px solid ${theme.palette.error.dark}`
+    border: `0.5px solid ${theme.palette.error.dark}`
   },
 
   "& .label": {
@@ -108,7 +108,7 @@ export const PasswordTextField = ({
         flexDirection="column"
       >
         {label && <span className="label">{label}</span>}
-        <input id={id} {...props} />
+        <input id={id} type={visibility ? 'text' : 'password'} {...props} />
       </Box>
       <IconButton
         onClick={() => setVisibility(!visibility)}

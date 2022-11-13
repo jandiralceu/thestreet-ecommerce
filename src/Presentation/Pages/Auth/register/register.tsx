@@ -16,27 +16,37 @@ import "./register.styles.scss";
 import { RouteName } from "../../../utils";
 
 import { registrationFormValidation } from "./register.validation";
+import { AuthService } from "../../../../services";
+import React from "react";
+import { AuthRepository } from "../../../../repositories";
 
 const RegisterPage = () => {
-  const {
-    handleSubmit,
-    values,
-    handleChange,
-    handleBlur,
-    touched,
-    errors,
-  } = useFormik({
-    initialValues: {
-      fullName: "",
-      email: "",
-      password: "",
-      repeat_password: "",
+  const registerWithEmailAndPassword = React.useCallback(
+    (email: string, password: string) => {
+      const authService = new AuthService(new AuthRepository());
+
+      return authService.registerWithEmailAndPassword(email, password);
     },
-    validationSchema: registrationFormValidation(),
-    onSubmit: (values) => {
-      console.log(values);
-    },
-  });
+    []
+  );
+
+  const { handleSubmit, values, handleChange, handleBlur, touched, errors } =
+    useFormik({
+      initialValues: {
+        email: "",
+        password: "",
+        repeat_password: "",
+      },
+      validationSchema: registrationFormValidation(),
+      onSubmit: async (values) => {
+        try {
+          const response = await registerWithEmailAndPassword(values.email, values.password);
+          console.log(response);
+        } catch(error) {
+          console.log(error)
+        }
+      },
+    });
 
   return (
     <section>
@@ -55,22 +65,11 @@ const RegisterPage = () => {
       <Divider sx={{ marginTop: 3 }}>or</Divider>
 
       <Box component="form" marginTop={4} onSubmit={handleSubmit}>
-        <TextField
-          id="fullName"
-          label="Your name"
-          value={values.fullName}
-          onBlur={handleBlur}
-          onChange={handleChange}
-          placeholder="John Doe"
-          error={touched.fullName && !!errors.fullName}
-          startAdornment={<Email sx={{ width: 18 }} />}
-          helperText={touched.fullName && errors.fullName}
-        />
-
         <Box marginTop={1}>
           <TextField
             id="email"
             label="Email"
+            value={values.email}
             placeholder="me@email.com"
             onBlur={handleBlur}
             onChange={handleChange}
@@ -84,6 +83,7 @@ const RegisterPage = () => {
           <PasswordTextField
             id="password"
             label="Password"
+            value={values.password}
             placeholder="Password"
             onBlur={handleBlur}
             onChange={handleChange}
@@ -96,11 +96,12 @@ const RegisterPage = () => {
           <PasswordTextField
             id="repeat_password"
             onBlur={handleBlur}
+            value={values.repeat_password}
             onChange={handleChange}
             error={touched.repeat_password && !!errors.repeat_password}
             helperText={touched.repeat_password && errors.repeat_password}
             label="Repeat Password"
-            placeholder="Password"
+            placeholder="Repeat Password"
           />
         </Box>
 

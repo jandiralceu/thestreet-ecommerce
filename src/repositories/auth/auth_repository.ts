@@ -1,19 +1,30 @@
 import { User } from "../../models";
-import { signInWithGooglePopup, createUserDocumentFromAuth } from "../../infra";
+import { signInWithGooglePopup, createUserDocumentFromAuth, createAccountWithEmailAndPassword } from "../../infra";
 
 export interface IAuthRepository {
-  signInWithGoogle(): Promise<User>;
+  loginWithGoogle(): Promise<User>;
+  registerWithEmailAndPassword(email: string, password: string): Promise<User>;
 }
 
 export class AuthRepository implements IAuthRepository {
-  async signInWithGoogle(): Promise<User> {
+  async registerWithEmailAndPassword(email: string, password: string): Promise<User> {
     try {
-      const result = await signInWithGooglePopup();
-      await createUserDocumentFromAuth(result.user);
+      const response = await createAccountWithEmailAndPassword(email, password);
 
-      return result.user;
+      await createUserDocumentFromAuth(response);
+
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async loginWithGoogle(): Promise<User> {
+    try {
+      const response = await signInWithGooglePopup();
+      await createUserDocumentFromAuth(response.user);
+
+      return response.user;
     } catch (e) {
-      console.log(e);
       throw e;
     }
   }

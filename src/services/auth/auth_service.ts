@@ -1,8 +1,9 @@
-import { User } from "../../models";
+import { User } from "firebase/auth";
 import { IAuthRepository } from "../../repositories";
 
 export interface IAuthService {
-  signInWithGoogle(): Promise<User>;
+  loginWithGoogle(): Promise<User>;
+  registerWithEmailAndPassword(email: string, password: string): Promise<User>;
 }
 
 export class AuthService implements IAuthService {
@@ -11,8 +12,12 @@ export class AuthService implements IAuthService {
   constructor(authRepository: IAuthRepository) {
     this.#authRepository = authRepository;
   }
+  
+  registerWithEmailAndPassword(email: string, password: string): Promise<User> {
+    return this.#authRepository.registerWithEmailAndPassword(email, password);
+  }
 
-  async signInWithGoogle(): Promise<User> {
-    return this.#authRepository.signInWithGoogle();
+  async loginWithGoogle(): Promise<User> {
+    return this.#authRepository.loginWithGoogle();
   }
 }

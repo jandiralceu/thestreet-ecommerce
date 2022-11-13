@@ -2,9 +2,6 @@ import * as Yup from "yup";
 
 export const registrationFormValidation = () => {
   return Yup.object().shape({
-    fullName: Yup.string()
-      .required("Required Field")
-      .min(3, "Your name must have 3 characters or more."),
     email: Yup.string()
       .required("Required Field")
       .email("Please, provide a valid email."),

@@ -23,7 +23,7 @@ const LoginPage = () => {
   const signWithGoogle = React.useCallback(() => {
     const authService = new AuthService(new AuthRepository());
 
-    authService.signInWithGoogle().then((user) => {
+    authService.loginWithGoogle().then((user) => {
       console.log(user);
     });
   }, []);
@@ -68,6 +68,7 @@ const LoginPage = () => {
           placeholder="me@email.com"
           onBlur={handleBlur}
           onChange={handleChange}
+          value={values.email}
           error={touched.email && !!errors.email}
           helperText={touched.email && errors.email}
         />
@@ -75,6 +76,7 @@ const LoginPage = () => {
           <PasswordTextField
             id="password"
             label="Password"
+            value={values.password}
             placeholder="Password"
             onBlur={handleBlur}
             onChange={handleChange}
