@@ -7,7 +7,6 @@ import { Box, Divider, Typography } from "@mui/material";
 import { AuthRepository } from "../../../../repositories";
 import { AuthService } from "../../../../services";
 import { SocialButton } from "../components";
-import { ReactComponent as GoogleLogo } from "../../../assets/images/google_logo.svg";
 
 import "./login.styles.scss";
 import {
@@ -18,25 +17,26 @@ import {
 import { RouteName } from "../../../utils";
 
 import { loginFormValidation } from "./login.validation";
+import { GoogleLogo } from "../../../components/svgs";
+
+const authService = new AuthService(new AuthRepository());
 
 const LoginPage = () => {
-  const signWithGoogle = React.useCallback(() => {
-    const authService = new AuthService(new AuthRepository());
-
-    authService.loginWithGoogle().then((user) => {
-      console.log(user);
-    });
-  }, []);
-
-  const { handleSubmit, values, handleChange, handleBlur, touched, errors } =
+  const { handleSubmit, values, handleChange, handleBlur, touched, errors, resetForm } =
     useFormik({
       initialValues: {
         email: "",
         password: "",
       },
       validationSchema: loginFormValidation(),
-      onSubmit: (values) => {
-        console.log(values);
+      onSubmit: async (values) => {
+        try {
+          const response = await authService.login(values.email, values.password);
+          console.log(response);
+          resetForm();
+        } catch (error: any) {
+          console.log(`error ${error?.message}`);
+        }
       },
     });
 
@@ -51,7 +51,14 @@ const LoginPage = () => {
 
       <Box marginTop={4}>
         <SocialButton
-          onClick={signWithGoogle}
+          onClick={async () => {
+            try {
+              const response = await authService.loginWithGoogle();
+              console.log(response);
+            } catch(error: any) {
+              console.log(`error ${error?.message}`);
+            }
+          }}
           startIcon={<GoogleLogo width={24} height={24} />}
         >
           Login with Google

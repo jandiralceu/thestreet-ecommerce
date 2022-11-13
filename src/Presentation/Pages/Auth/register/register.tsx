@@ -1,9 +1,10 @@
 import { Box, Divider, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
-import { EmailRounded as Email } from "@mui/icons-material";
-
-import { ReactComponent as GoogleLogo } from "../../../assets/images/google_logo.svg";
+import {
+  EmailRounded as Email,
+  PersonRounded as Person,
+} from "@mui/icons-material";
 
 import { SocialButton } from "../components";
 import {
@@ -17,36 +18,43 @@ import { RouteName } from "../../../utils";
 
 import { registrationFormValidation } from "./register.validation";
 import { AuthService } from "../../../../services";
-import React from "react";
 import { AuthRepository } from "../../../../repositories";
+import { GoogleLogo } from "../../../components/svgs";
+
+const authService = new AuthService(new AuthRepository());
 
 const RegisterPage = () => {
-  const registerWithEmailAndPassword = React.useCallback(
-    (email: string, password: string) => {
-      const authService = new AuthService(new AuthRepository());
-
-      return authService.registerWithEmailAndPassword(email, password);
+  const {
+    handleSubmit,
+    values,
+    handleChange,
+    handleBlur,
+    touched,
+    errors,
+    resetForm,
+  } = useFormik({
+    initialValues: {
+      fullName: "",
+      email: "",
+      password: "",
+      repeat_password: "",
     },
-    []
-  );
-
-  const { handleSubmit, values, handleChange, handleBlur, touched, errors } =
-    useFormik({
-      initialValues: {
-        email: "",
-        password: "",
-        repeat_password: "",
-      },
-      validationSchema: registrationFormValidation(),
-      onSubmit: async (values) => {
-        try {
-          const response = await registerWithEmailAndPassword(values.email, values.password);
-          console.log(response);
-        } catch(error) {
-          console.log(error)
-        }
-      },
-    });
+    validationSchema: registrationFormValidation(),
+    onSubmit: async (values) => {
+      try {
+        const { email, password, fullName } = values;
+        const response = await authService.registerWithEmailAndPassword(
+          email,
+          password,
+          fullName
+        );
+        console.log(response);
+        resetForm();
+      } catch (error: any) {
+        console.log(`error ${error?.message}`);
+      }
+    },
+  });
 
   return (
     <section>
@@ -57,7 +65,17 @@ const RegisterPage = () => {
       </Typography>
 
       <Box marginTop={4}>
-        <SocialButton startIcon={<GoogleLogo width={24} height={24} />}>
+        <SocialButton
+          onClick={async () => {
+            try {
+              const response = await authService.loginWithGoogle();
+              console.log(response);
+            } catch (error: any) {
+              console.log(`error ${error?.message}`);
+            }
+          }}
+          startIcon={<GoogleLogo width={24} height={24} />}
+        >
           Register with Google
         </SocialButton>
       </Box>
@@ -65,6 +83,18 @@ const RegisterPage = () => {
       <Divider sx={{ marginTop: 3 }}>or</Divider>
 
       <Box component="form" marginTop={4} onSubmit={handleSubmit}>
+        <TextField
+          id="fullName"
+          label="Name"
+          value={values.fullName}
+          placeholder="me@email.com"
+          onBlur={handleBlur}
+          onChange={handleChange}
+          error={touched.fullName && !!errors.fullName}
+          helperText={touched.fullName && errors.fullName}
+          startAdornment={<Person sx={{ width: 18 }} />}
+        />
+
         <Box marginTop={1}>
           <TextField
             id="email"
