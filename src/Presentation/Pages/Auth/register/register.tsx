@@ -14,7 +14,7 @@ import {
 } from "../../../components";
 
 import "./register.styles.scss";
-import { RouteName } from "../../../utils";
+import { DefaultText, RouteName } from "../../../utils";
 
 import { registrationFormValidation } from "./register.validation";
 import { GoogleLogo } from "../../../components/svgs";
@@ -57,7 +57,7 @@ const RegisterPage = () => {
 
   return (
     <section>
-      <Typography variant="h1">Register into CRWN</Typography>
+      <Typography variant="h1">Register into {DefaultText.appName}</Typography>
 
       <Typography variant="caption" component="p" marginTop={2}>
         Hi, There! Register into CRWN, choosing one of the options bellow.

@@ -10,7 +10,6 @@ const theme = createTheme({
     }
   },
   typography: {
-    fontFamily: "'Open Sans'",
     caption: {
       color: "#424242",
     },

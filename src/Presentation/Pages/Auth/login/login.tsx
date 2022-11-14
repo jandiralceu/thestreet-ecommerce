@@ -12,7 +12,7 @@ import {
   SubmitButton,
   TextField,
 } from "../../../components";
-import { RouteName } from "../../../utils";
+import { DefaultText, RouteName } from "../../../utils";
 
 import { loginFormValidation } from "./login.validation";
 import { GoogleLogo } from "../../../components/svgs";
@@ -44,7 +44,7 @@ const LoginPage = () => {
 
   return (
     <section>
-      <Typography variant="h1">Sign in to CRWN</Typography>
+      <Typography variant="h1">Sign into {DefaultText.appName}</Typography>
 
       <Typography variant="caption" component="p" marginTop={2}>
         Welcome back! Sign in with your data that you entered during

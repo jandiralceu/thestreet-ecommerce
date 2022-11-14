@@ -1,6 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import { Box, Card, styled, Typography } from "@mui/material";
-import { RouteName } from "../../../utils";
+import { DefaultText, RouteName } from "../../../utils";
 import { AppStoreDownloadEn } from "../../../components/svgs";
 
 const SectionContainer = styled('section')(({ theme }) => ({
@@ -8,7 +8,7 @@ const SectionContainer = styled('section')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: '#f7f3f3',
+  backgroundColor: theme.palette.primary.light,
 
   '& .auth-container': {
     width: '860px',
@@ -52,7 +52,7 @@ const AuthMainLayout = () => {
         }}>
           <Box marginX={6} className="logo-container">
             <Link to={RouteName.home}>
-              <Typography variant="h1">Awesome</Typography>
+              <Typography variant="h1">{DefaultText.appName}</Typography>
             </Link>
           </Box>
 
