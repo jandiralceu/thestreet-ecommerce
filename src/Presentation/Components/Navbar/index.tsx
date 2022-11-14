@@ -7,7 +7,8 @@ import {
 } from "@mui/icons-material";
 
 import { useUserContext } from "../../contexts";
-import { DefaultText, RouteName } from "../../utils";
+import { RouteName } from "../../utils";
+import { AppLogo } from "../app_logo";
 
 const LogoutButton = styled("button")(() => ({
   border: "none",
@@ -28,27 +29,23 @@ const LogoutButton = styled("button")(() => ({
 const StyledNavbar = styled("nav")((theme) => ({
   padding: "40px 0",
   display: "flex",
+  alignItems: 'center',
   justifyContent: "space-between",
 
   "& ul": {
-    margin: 0,
-    padding: 0,
-    listStyle: "none",
-    boxSizing: "border-box",
     display: "flex",
+    textTransform: "uppercase",
 
     "& li": {
-      boxSizing: "border-box",
-      display: "flex",
-      alignItems: "center",
+      fontSize: 14,
+    },
+
+    "& li:not(:last-of-type)": {
+      marginRight: 24,
     },
   },
 
-  "& .main-menu": {
-    "& li:not(:last-of-type)": {
-      marginRight: 12,
-    },
-  },
+  "& .main-menu": {},
 
   "& .secondary-menu": {
     "& li": {
@@ -57,14 +54,9 @@ const StyledNavbar = styled("nav")((theme) => ({
         alignItems: "center",
 
         "& span": {
-          fontSize: 14,
           marginLeft: 6,
         },
       },
-    },
-
-    "& li:not(:last-of-type)": {
-      marginRight: 20,
     },
   },
 }));
@@ -84,9 +76,7 @@ export const Navbar = () => {
         </li>
       </ul>
 
-      <Link className="logo-container" to="/">
-        {DefaultText.appName}
-      </Link>
+      <AppLogo />
 
       <Box>
         <ul className="secondary-menu">

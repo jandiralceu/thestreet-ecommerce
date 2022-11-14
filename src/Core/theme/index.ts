@@ -10,6 +10,7 @@ const theme = createTheme({
     }
   },
   typography: {
+    fontFamily: "Sono, sans-serif",
     caption: {
       color: "#424242",
     },

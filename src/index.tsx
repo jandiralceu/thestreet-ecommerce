@@ -7,7 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 
 import theme from "./core/theme";
-import { UserProvider } from "./presentation/contexts";
+import { ProductProvider, UserProvider } from "./presentation/contexts";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -19,7 +19,10 @@ root.render(
       <CssBaseline />
       <BrowserRouter>
       <UserProvider>
-        <App />
+        {/* Move ProductProvider to Shop Container  */}
+        <ProductProvider>
+          <App />
+        </ProductProvider>
       </UserProvider>
     </BrowserRouter>
     </ThemeProvider>

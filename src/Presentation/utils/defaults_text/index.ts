@@ -1,3 +1,3 @@
 export class DefaultText {
-    static appName = "JStore";
+    static appName = "TheStreet";
 }

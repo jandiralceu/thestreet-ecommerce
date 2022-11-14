@@ -1,16 +1,19 @@
-import SHOP_DATA from '../../../mocks/shop-data.json';
+import { Box } from '@mui/material';
+import { useProductContext } from '../../contexts';
+
 
 const ShopPage = () => {
+  const { products } = useProductContext(); 
   return (
-    <div>
+    <Box>
       <h1>Shop Page</h1>
 
-      {SHOP_DATA.map((item) => (
+      {products?.map((item) => (
         <div key={item.id}>
           <h3>{item.name}</h3>
         </div>
       ))}
-    </div>
+    </Box>
   );
 };
 
