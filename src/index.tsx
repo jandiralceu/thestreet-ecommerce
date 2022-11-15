@@ -4,12 +4,17 @@ import { BrowserRouter } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ModalProvider } from "react-modal-hook";
 import { TransitionGroup } from "react-transition-group";
+import { SnackbarProvider } from "notistack";
 
 import "./index.scss";
 import App from "./app";
 import reportWebVitals from "./reportWebVitals";
 import theme from "./core/theme";
-import { ProductProvider, UserProvider } from "./presentation/contexts";
+import {
+  CartProvider,
+  ProductProvider,
+  UserProvider,
+} from "./presentation/contexts";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -20,14 +25,23 @@ root.render(
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <ModalProvider rootComponent={TransitionGroup}>
-        <BrowserRouter>
-          <UserProvider>
-            {/* Move ProductProvider to Shop Container  */}
-            <ProductProvider>
-              <App />
-            </ProductProvider>
-          </UserProvider>
-        </BrowserRouter>
+        <SnackbarProvider
+          preventDuplicate
+          maxSnack={4}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          autoHideDuration={3000}
+        >
+          <BrowserRouter>
+            <UserProvider>
+              {/* Move ProductProvider to Shop Container  */}
+              <ProductProvider>
+                <CartProvider>
+                  <App />
+                </CartProvider>
+              </ProductProvider>
+            </UserProvider>
+          </BrowserRouter>
+        </SnackbarProvider>
       </ModalProvider>
     </ThemeProvider>
   </React.StrictMode>
