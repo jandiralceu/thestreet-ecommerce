@@ -4,6 +4,6 @@ export * from "./main_theme";
 export * from "./submit_button";
 export * from "./textfield";
 export * from "./product_card";
-export * from "./rate";
 export * from "./alert";
 export * from "./dialog";
+export * from "./price_label";

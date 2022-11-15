@@ -1,4 +1,4 @@
-import { Box, styled } from "@mui/material";
+import { Box, styled, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import {
   ShoppingCartRounded as ShoppingCart,
@@ -6,7 +6,7 @@ import {
   ExitToAppRounded as Logout,
 } from "@mui/icons-material";
 
-import { useUserContext } from "../../contexts";
+import { useCartContext, useUserContext } from "../../contexts";
 import { RouteName } from "../../utils";
 import { AppLogo } from "../app_logo";
 
@@ -26,7 +26,7 @@ const LogoutButton = styled("button")(() => ({
   },
 }));
 
-const StyledNavbar = styled("nav")((theme) => ({
+const StyledNavbar = styled("nav")(({theme}) => ({
   padding: "40px 0",
   display: "flex",
   alignItems: 'center',
@@ -53,6 +53,28 @@ const StyledNavbar = styled("nav")((theme) => ({
         display: "flex",
         alignItems: "center",
 
+        '& .cart-quantity': {
+          display: 'flex',
+          position: 'relative',
+
+          '& p': {
+            top: -14,
+            right: -10,
+            padding: 6,
+            width: 20,
+            height: 20,
+            borderRadius: 20,
+            border: 'none',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'absolute',
+            color: '#fff',
+            fontSize: 12,
+            backgroundColor: theme.palette.error.main,
+          }
+        },
+
         "& span": {
           marginLeft: 6,
         },
@@ -63,6 +85,7 @@ const StyledNavbar = styled("nav")((theme) => ({
 
 export const Navbar = () => {
   const { authenticated, logout } = useUserContext();
+  const { itemsQuantity } = useCartContext();
 
   return (
     <StyledNavbar>
@@ -82,7 +105,10 @@ export const Navbar = () => {
         <ul className="secondary-menu">
           <li>
             <Link to={RouteName.cart}>
-              <ShoppingCart sx={{ width: 24 }} />
+              <Box className="cart-quantity">
+                <ShoppingCart sx={{ width: 24 }} />
+                {!!itemsQuantity  && <Typography component="p">{itemsQuantity}</Typography>}
+              </Box>
               <span>Cart</span>
             </Link>
           </li>

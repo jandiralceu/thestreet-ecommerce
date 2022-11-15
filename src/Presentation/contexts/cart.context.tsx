@@ -31,7 +31,6 @@ export const useCartContext = () => useContext(CartContext);
 
 export const CartProvider = ({ children }: PropsWithChildren) => {
   const [cartItems, setCartItems] = useState<Map<number, CartItem>>(new Map());
-
   const items = useMemo(() => Array.from(cartItems.values()), [cartItems]);
   const itemsQuantity = useMemo(() => {
     return items.reduce((quantity, item) => quantity + item.quantity, 0);
@@ -41,7 +40,7 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
   }, [items]);
 
   const addItem = (id: number, item: CartItem) => {
-    const itemsCopy = { ...cartItems };
+    const itemsCopy = new Map(cartItems);
     const currentItem = itemsCopy.get(id);
 
     if (currentItem) {
@@ -61,16 +60,16 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
     const currentItem = itemsCopy.get(id);
 
     if (currentItem) {
-      setCartItems(itemsCopy.set(id, { ...currentItem, quantity: newQuantity }));
+      setCartItems(
+        itemsCopy.set(id, { ...currentItem, quantity: newQuantity })
+      );
     }
   };
 
   const removeItem = (id: number) => {
     const itemsCopy = { ...cartItems };
 
-    if (itemsCopy.delete(id)) {
-      setCartItems(itemsCopy);
-    }
+    if (itemsCopy.delete(id)) setCartItems(itemsCopy);
   };
 
   return (

@@ -23,14 +23,15 @@ import { yellow } from "@mui/material/colors";
 export type DialogProps = {
   actions?: ReactNode;
   buttonLabel?: string;
+  hideControls?: boolean;
   onClose?: () => void;
 } & Omit<MuiDialogProps, "onClose"> &
   Pick<AlertProps, "severity">;
 
 const StyledDialog = styled(MuiDialog)({
   "& .MuiDialogContent-root": {
-    marginTop: 20,
     textAlign: "center",
+    padding: 0,
   },
   "& .MuiDialogActions-root": {
     justifyContent: "center",
@@ -38,11 +39,11 @@ const StyledDialog = styled(MuiDialog)({
   "& p": {
     fontSize: 14,
   },
-  "& .MuiSvgIcon-root": {
-    height: 60,
-    width: 60,
-    marginBottom: 20,
-  },
+  // "& .MuiSvgIcon-root": {
+  //   height: 60,
+  //   width: 60,
+  //   marginBottom: 20,
+  // },
 });
 
 export const Dialog = ({
@@ -53,6 +54,7 @@ export const Dialog = ({
   children,
   maxWidth = "xs",
   actions,
+  hideControls = false,
   buttonLabel,
   ...props
 }: DialogProps) => {
@@ -93,12 +95,19 @@ export const Dialog = ({
         <DialogContentText>{children}</DialogContentText>
       </DialogContent>
 
-      <DialogActions>
-        {actions}
-        <Button type="button" variant="text" onClick={onClose} disableElevation>
-          {buttonLabel ?? "Close"}
-        </Button>
-      </DialogActions>
+      {!hideControls && (
+        <DialogActions>
+          {actions}
+          <Button
+            type="button"
+            variant="text"
+            onClick={onClose}
+            disableElevation
+          >
+            {buttonLabel ?? "Close"}
+          </Button>
+        </DialogActions>
+      )}
     </StyledDialog>
   );
 };
