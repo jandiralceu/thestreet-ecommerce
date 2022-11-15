@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { ModalProvider } from "react-modal-hook";
+import { TransitionGroup } from "react-transition-group";
+
 import "./index.scss";
 import App from "./app";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-
 import theme from "./core/theme";
 import { ProductProvider, UserProvider } from "./presentation/contexts";
 
@@ -17,14 +19,16 @@ root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <BrowserRouter>
-      <UserProvider>
-        {/* Move ProductProvider to Shop Container  */}
-        <ProductProvider>
-          <App />
-        </ProductProvider>
-      </UserProvider>
-    </BrowserRouter>
+      <ModalProvider rootComponent={TransitionGroup}>
+        <BrowserRouter>
+          <UserProvider>
+            {/* Move ProductProvider to Shop Container  */}
+            <ProductProvider>
+              <App />
+            </ProductProvider>
+          </UserProvider>
+        </BrowserRouter>
+      </ModalProvider>
     </ThemeProvider>
   </React.StrictMode>
 );
