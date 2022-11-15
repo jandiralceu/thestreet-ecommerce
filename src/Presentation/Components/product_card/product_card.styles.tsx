@@ -55,40 +55,36 @@ export const BoxModal = styled(Box)(() => ({
   },
 
   "& .modal-description": {
-    display: "flex",
-    padding: 60,
-    textAlign: "left",
-    justifyContent: "flex-start",
-    flexDirection: "column",
+    "& .close": {
+      textAlign: 'right',
+      padding: '12px 12px 0',
+    },
 
-    "& .controls": {
-      height: 48,
-      marginTop: 24,
+    "& .modal-content": {
+      padding: '20px 60px',
       display: "flex",
-      alignItems: "center",
-      border: "1px solid #ccc",
+      textAlign: "left",
+      justifyContent: "flex-start",
+      flexDirection: "column",
 
-      "& .label": {
-        // width: "100%",
-        marginLeft: 14,
+      "& .modal-controllers": {
+        display: "grid",
+        gridTemplateColumns: 'auto 1fr',
+        justifyContent: "flex-start",
+        marginTop: 24,
+
+        "& .add-to-cart": {
+          border: "none",
+          textTransform: "uppercase",
+          backgroundColor: "#000",
+          color: "#fff",
+          width: '100%',
+          height: "100% !important",
+          cursor: "pointer",
+        },
       },
 
-      "& .control-quantity": {
-        display: "flex",
-        alignItems: "center",
-        margin: "0 20px",
-        width: 80,
-      },
-
-      "& .add-to-cart": {
-        border: "none",
-        textTransform: "uppercase",
-        backgroundColor: "#000",
-        color: "#fff",
-        width: 200,
-        height: "100%",
-        cursor: "pointer",
-      },
+      
     },
   },
 }));

@@ -2,23 +2,18 @@ import { useState } from "react";
 import { Box, IconButton, Rating, Typography } from "@mui/material";
 import {
   VisibilityRounded as QuickLook,
-  ArrowLeftRounded as Subtract,
-  ArrowRightRounded as Add,
+  CloseRounded as Close,
 } from "@mui/icons-material";
-import { Product } from "../../../models";
+import { Product, QuantityOperationType } from "../../../models";
 import { useDialog } from "../../hooks";
 import { PriceLabel } from "../price_label";
-import { BoxModal, Container, QuickLookButton } from './product_card.styles';
+import { BoxModal, Container, QuickLookButton } from "./product_card.styles";
 import { useCartContext } from "../../contexts";
+import { NumberController } from "../number_controller";
 
 type ProductCardProps = {
   product: Product;
 };
-
-enum QuantityOperationType {
-  add, 
-  subtract,
-}
 
 const INITIAL_VALUE = 1;
 
@@ -30,9 +25,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     if (operation === QuantityOperationType.add) setQuantity(quantity + 1);
     else {
       if (quantity == 1) return;
-      setQuantity(quantity - 1)
-    };
-  }
+      setQuantity(quantity - 1);
+    }
+  };
 
   const [openQuickLookModal, closeQuickLookModal] = useDialog(
     {
@@ -50,39 +45,56 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             }}
           ></Box>
           <Box className="modal-description">
-            <Typography variant="h5">{product.name}</Typography>
+            <Box className="close">
+              <IconButton
+                onClick={() => {
+                  setQuantity(INITIAL_VALUE);
+                  closeQuickLookModal();
+                }}
+              >
+                <Close />
+              </IconButton>
+            </Box>
 
-            <PriceLabel
-              price={product.price}
-              mt={2}
-              priceFontSize={24}
-              promotionalPriceFontSize={28}
-            />
+            <Box className="modal-content">
+              <Typography variant="h5">{product.name}</Typography>
+              <PriceLabel
+                price={product.price}
+                mt={2}
+                priceFontSize={24}
+                promotionalPriceFontSize={28}
+              />
 
-            <Rating value={3.5} sx={{ marginTop: 4 }} readOnly />
+              <Rating value={3.5} sx={{ marginTop: 4 }} readOnly />
 
-            <Typography mt={4}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis
-              eos, exercitationem nobis nesciunt pariatur amet dolores beatae
-              dicta, dolor alias sit. Obcaecati itaque perspiciatis, aperiam
-              nisi maiores sint porro repellendus.
-            </Typography>
+              <Typography mt={4}>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Corporis eos, exercitationem nobis nesciunt pariatur amet
+                dolores beatae dicta, dolor alias sit. Obcaecati itaque
+                perspiciatis, aperiam nisi maiores sint porro repellendus.
+              </Typography>
 
-            <Box className="controls">
-              <Typography className="label">Quantity</Typography>
-              <Box className="control-quantity">
-                <IconButton onClick={() => updateQuantity(QuantityOperationType.subtract)}><Subtract /></IconButton>
-                <Typography component="span">{quantity}</Typography>
-                <IconButton onClick={() => updateQuantity(QuantityOperationType.add)}><Add /></IconButton>
+              <Box className="modal-controllers">
+                <NumberController 
+                  value={quantity}
+                  increase={() => updateQuantity(QuantityOperationType.add)}
+                  decrease={() => updateQuantity(QuantityOperationType.subtract)}
+                />
+                <button
+                  onClick={() => {
+                    if (quantity > 0) {
+                      addItem(product.id, { ...product, quantity });
+                    }
+
+                    setQuantity(INITIAL_VALUE);
+                    closeQuickLookModal();
+                  }}
+                  type="button"
+                  className="add-to-cart"
+                >
+                  Add to Cart
+                </button>
               </Box>
-              <button onClick={() => {
-                if (quantity > 0) {
-                  addItem(product.id, { ...product, quantity })
-                }
-
-                setQuantity(INITIAL_VALUE);
-                closeQuickLookModal();
-              }} type="button" className="add-to-cart">Add to Cart</button>
             </Box>
           </Box>
         </BoxModal>

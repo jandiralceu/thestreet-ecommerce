@@ -4,27 +4,32 @@ import {
   PropsWithChildren,
   useState,
   useMemo,
+  useCallback,
 } from "react";
-import { CartItem } from "../../models";
+import { CartItem, QuantityOperationType } from "../../models";
 
 type CartContextProps = {
   itemsQuantity: number;
   total: number;
+  isEmpty: boolean;
   cartItems: Map<number, CartItem>;
   items: CartItem[];
+  getTotalPriceByItem: (item: CartItem) => number
   removeItem: (id: number) => void;
   addItem: (id: number, item: CartItem) => void;
-  updateItemQuantity: (id: number, newQuantity: number) => void;
+  updateItemQuantity: (id: number, operation: QuantityOperationType) => void;
 };
 
 const CartContext = createContext<CartContextProps>({
   itemsQuantity: 0,
   total: 0,
   items: [],
+  isEmpty: false,
   cartItems: new Map(),
   removeItem: (id: number) => {},
+  getTotalPriceByItem: (item: CartItem) => 0,
   addItem: (id: number, item: CartItem) => {},
-  updateItemQuantity: (id: number, newQuantity: number) => {},
+  updateItemQuantity: (id: number, operation: QuantityOperationType) => {},
 });
 
 export const useCartContext = () => useContext(CartContext);
@@ -38,6 +43,8 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
   const total = useMemo(() => {
     return items.reduce((total, item) => total + (item.price * item.quantity), 0);
   }, [items]);
+  const isEmpty = useMemo(() => !items.length, [items]);
+  const getTotalPriceByItem = useCallback((item: CartItem) => item.price * item.quantity, []);
 
   const addItem = (id: number, item: CartItem) => {
     const itemsCopy = new Map(cartItems);
@@ -55,19 +62,19 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
     setCartItems(itemsCopy);
   };
 
-  const updateItemQuantity = (id: number, newQuantity: number) => {
-    const itemsCopy = { ...cartItems };
-    const currentItem = itemsCopy.get(id);
+  const updateItemQuantity = (id: number, operation: QuantityOperationType) => {
+    const itemsCopy = new Map(cartItems);
+    let currentItem = itemsCopy.get(id);
 
-    if (currentItem) {
-      setCartItems(
-        itemsCopy.set(id, { ...currentItem, quantity: newQuantity })
-      );
-    }
+    if (!currentItem || operation == QuantityOperationType.subtract && currentItem.quantity == 1) return;
+
+    operation == QuantityOperationType.subtract ? currentItem.quantity-- : currentItem.quantity++;
+
+    setCartItems(itemsCopy.set(id, currentItem!));
   };
 
   const removeItem = (id: number) => {
-    const itemsCopy = { ...cartItems };
+    const itemsCopy = new Map(cartItems);
 
     if (itemsCopy.delete(id)) setCartItems(itemsCopy);
   };
@@ -75,6 +82,7 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
   return (
     <CartContext.Provider
       value={{
+        isEmpty,
         cartItems,
         addItem,
         updateItemQuantity,
@@ -82,6 +90,8 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
         itemsQuantity,
         total,
         items,
+        getTotalPriceByItem,
+
       }}
     >
       {children}

@@ -7,3 +7,4 @@ export * from "./product_card";
 export * from "./alert";
 export * from "./dialog";
 export * from "./price_label";
+export * from "./number_controller";
