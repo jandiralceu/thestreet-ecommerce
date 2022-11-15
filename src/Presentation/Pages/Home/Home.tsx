@@ -1,34 +1,8 @@
 import { Box, styled, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import { ProductCard } from "../../components";
+import { useProductContext } from "../../contexts";
 import { RouteName } from "../../utils";
-
-// const categories: CategoryContainerProps[] = [
-//     {
-//         id: 1,
-//         title: "hats",
-//         imageUrl: "https://i.ibb.co/cvpntL1/hats.png"
-//       },
-//       {
-//         "id": 2,
-//         title: "jackets",
-//         imageUrl: "https://i.ibb.co/px2tCc3/jackets.png"
-//       },
-//       {
-//         "id": 3,
-//         title: "sneakers",
-//         imageUrl: "https://i.ibb.co/0jqHpnp/sneakers.png"
-//       },
-//       {
-//         "id": 4,
-//         title: "women",
-//         imageUrl: "https://i.ibb.co/GCCdy8t/womens.png"
-//       },
-//       {
-//         "id": 5,
-//         title: "men",
-//         imageUrl: "https://i.ibb.co/R70vBrQ/men.png"
-//       }
-// ];
 
 const Main = styled("main")(() => ({
   "& .hero": {
@@ -36,23 +10,36 @@ const Main = styled("main")(() => ({
     height: "50vh",
     gap: 20,
     gridTemplateAreas: `
-    "highlight1 highlight2"
-    "highlight1 highlight3"
-  `,
+      "highlight1 highlight2"
+      "highlight1 highlight3"
+    `,
+    gridTemplateColumns: '2fr 1fr',
 
     "& a": {
       backgroundColor: "#f3f3f3",
 
       "&.area1": {
         gridArea: "highlight1",
+        backgroundImage: `url(${require('../../assets/images/highlight_product.jpg')})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center',
       },
-
+      
       "&.area2": {
         gridArea: "highlight2",
+        backgroundImage: `url(${require('../../assets/images/male.jpg')})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center',
       },
 
       "&.area3": {
         gridArea: "highlight3",
+        backgroundImage: `url(${require('../../assets/images/female.jpg')})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center',
       },
     },
   },
@@ -68,15 +55,12 @@ const Main = styled("main")(() => ({
     display: 'grid',
     gap: 20,
     gridTemplateColumns: 'repeat(4, 1fr)',
-
-    '& .product': {
-      height: 200,
-      backgroundColor: "#f3f3f3",
-    },
   },
 }));
 
 const HomePage = () => {
+  const { products } = useProductContext(); 
+  
   return (
     <Main>
       <Box component="section" className="hero">
@@ -105,10 +89,7 @@ const HomePage = () => {
         <Typography sx={{ textTransform: 'uppercase' }}>Featured Products</Typography>
 
         <Box className="carrousel" mt={2} mb={12}>
-          <Box className="product"></Box>
-          <Box className="product"></Box>
-          <Box className="product"></Box>
-          <Box className="product"></Box>
+          {products?.slice(0, 4)?.map((product) => <ProductCard product={product} key={product.id} />)}
         </Box>
       </Box>
     </Main>

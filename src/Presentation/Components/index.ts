@@ -3,3 +3,5 @@ export * from './footer';
 export * from './main_theme';
 export * from './submit_button';
 export * from './textfield';
+export * from './product_card';
+export * from './rate';
