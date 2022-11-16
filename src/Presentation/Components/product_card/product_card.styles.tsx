@@ -90,3 +90,12 @@ export const BoxModal = styled(Box)(() => ({
     },
   },
 }));
+
+export const AddToCart = styled('button')(({ theme }) => ({
+  backgroundColor: 'transparent',
+  border: 'none',
+  outline: 'none',
+  textTransform: 'uppercase',
+  fontSize: 10,
+  cursor: 'pointer',
+}))

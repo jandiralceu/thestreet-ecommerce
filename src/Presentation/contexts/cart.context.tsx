@@ -10,7 +10,10 @@ import { CartItem, QuantityOperationType } from "../../models";
 
 type CartContextProps = {
   itemsQuantity: number;
+  subTotal: number;
   total: number;
+  shippingPrice: number,
+  discount: number;
   isEmpty: boolean;
   cartItems: Map<number, CartItem>;
   items: CartItem[];
@@ -22,7 +25,10 @@ type CartContextProps = {
 
 const CartContext = createContext<CartContextProps>({
   itemsQuantity: 0,
+  subTotal: 0,
   total: 0,
+  shippingPrice: 0,
+  discount: 0,
   items: [],
   isEmpty: false,
   cartItems: new Map(),
@@ -35,16 +41,19 @@ const CartContext = createContext<CartContextProps>({
 export const useCartContext = () => useContext(CartContext);
 
 export const CartProvider = ({ children }: PropsWithChildren) => {
+  const [shippingPrice, setShippingPrice] = useState(0);
+  const [discount, setDiscount] = useState(0);
   const [cartItems, setCartItems] = useState<Map<number, CartItem>>(new Map());
   const items = useMemo(() => Array.from(cartItems.values()), [cartItems]);
   const itemsQuantity = useMemo(() => {
     return items.reduce((quantity, item) => quantity + item.quantity, 0);
   }, [items]);
-  const total = useMemo(() => {
+  const subTotal = useMemo(() => {
     return items.reduce((total, item) => total + (item.price * item.quantity), 0);
   }, [items]);
   const isEmpty = useMemo(() => !items.length, [items]);
   const getTotalPriceByItem = useCallback((item: CartItem) => item.price * item.quantity, []);
+  const total = useMemo(() => subTotal + shippingPrice - discount, [subTotal, shippingPrice, discount]);
 
   const addItem = (id: number, item: CartItem) => {
     const itemsCopy = new Map(cartItems);
@@ -66,7 +75,7 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
     const itemsCopy = new Map(cartItems);
     let currentItem = itemsCopy.get(id);
 
-    if (!currentItem || operation == QuantityOperationType.subtract && currentItem.quantity == 1) return;
+    if (!currentItem || (operation == QuantityOperationType.subtract && currentItem.quantity == 1)) return;
 
     operation == QuantityOperationType.subtract ? currentItem.quantity-- : currentItem.quantity++;
 
@@ -88,8 +97,11 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
         updateItemQuantity,
         removeItem,
         itemsQuantity,
-        total,
+        subTotal,
         items,
+        total,
+        shippingPrice,
+        discount,
         getTotalPriceByItem,
 
       }}

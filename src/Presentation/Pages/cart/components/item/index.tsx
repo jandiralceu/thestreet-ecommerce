@@ -41,13 +41,13 @@ export const Item = (item: CartItem) => {
       </Box>
 
       <Box className="price-side">
-        <Typography component="p">{item.price}</Typography>
+        <Typography component="p">R$ {item.price}</Typography>
         <NumberController
           value={item.quantity}
           decrease={() => updateItemQuantity(item.id, QuantityOperationType.subtract)}
           increase={() => updateItemQuantity(item.id, QuantityOperationType.add)}
         />
-        <Typography component="p">{getTotalPriceByItem(item)}</Typography>
+        <Typography component="p">R$ {getTotalPriceByItem(item)}</Typography>
       </Box>
     </ItemContainer>
   );

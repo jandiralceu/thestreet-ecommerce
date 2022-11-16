@@ -12,12 +12,15 @@ import { CartPageContainer, CheckoutButton } from "./cart.styled";
 import { TransitionGroup } from "react-transition-group";
 
 const CartPage = () => {
-  const { items, total, isEmpty } = useCartContext();
+  const { items, subTotal, isEmpty, total, shippingPrice, discount } =
+    useCartContext();
 
   return (
     <Box>
       <Grow in={isEmpty} mountOnEnter unmountOnExit>
-        <Box><EmptyCart /></Box>
+        <Box>
+          <EmptyCart />
+        </Box>
       </Grow>
 
       {!isEmpty && (
@@ -64,14 +67,21 @@ const CartPage = () => {
                   <Typography component="h3">Subtotal</Typography>
                 </Box>
                 <Box>
-                  <Typography>{total}</Typography>
+                  <Typography>R$ {subTotal}</Typography>
                 </Box>
 
                 <Box>
                   <Typography component="h3">Shipping</Typography>
                 </Box>
                 <Box>
-                  <Typography>120</Typography>
+                  <Typography>R$ {shippingPrice}</Typography>
+                </Box>
+
+                <Box>
+                  <Typography component="h3">Discount</Typography>
+                </Box>
+                <Box>
+                  <Typography>R$ {discount}</Typography>
                 </Box>
               </Box>
 
@@ -83,7 +93,7 @@ const CartPage = () => {
                 justifyContent="space-between"
               >
                 <Typography component="h3">Total</Typography>
-                <Typography variant="h2">R$210</Typography>
+                <Typography variant="h2">R$ {total}</Typography>
               </Box>
 
               <CheckoutButton to={RouteName.checkout}>
