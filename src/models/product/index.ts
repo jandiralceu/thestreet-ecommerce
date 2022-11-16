@@ -3,6 +3,7 @@ export type Product = {
   name: string;
   imageUrl: string;
   price: number;
+  promotionalPrice: number | null
 };
 
 export type CartItem = {

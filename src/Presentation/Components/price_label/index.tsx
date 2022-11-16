@@ -3,7 +3,7 @@ import { Box, BoxProps, Typography } from "@mui/material";
 type PriceLabelProps = {
   price: number;
   priceFontSize?: number;
-  promotionalPrice?: number;
+  promotionalPrice: number | null;
   promotionalPriceFontSize?: number;
 };
 

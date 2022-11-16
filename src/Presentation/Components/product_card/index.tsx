@@ -66,10 +66,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             <Box className="modal-content">
               <Typography variant="h5">{product.name}</Typography>
               <PriceLabel
-                price={product.price}
                 mt={2}
                 priceFontSize={24}
+                price={product.price}
                 promotionalPriceFontSize={28}
+                promotionalPrice={product.promotionalPrice}
               />
 
               <Rating value={3.5} sx={{ marginTop: 4 }} readOnly />
@@ -175,6 +176,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             <Box>
               <PriceLabel
                 price={product.price}
+                promotionalPrice={product.promotionalPrice}
                 sx={{ textAlign: "center" }}
               />
             </Box>

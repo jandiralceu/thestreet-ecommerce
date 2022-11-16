@@ -9,8 +9,8 @@ import {
   signInWithEmailAndPassword as signInWithEmailAndPasswordFirebase,
   onAuthStateChanged,
 } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
-import { User } from "../models";
+import { getFirestore, doc, getDoc, setDoc, collection, writeBatch } from "firebase/firestore";
+import { Product, User } from "../models";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -53,6 +53,23 @@ export const createUserDocumentFromAuth = async (user: User) => {
     console.log(`error creating the user ${error?.message}`);
   }
 };
+
+export const addCollectionAndDocuments = async (collectionKey: string, products: any[], field: string): Promise<void> => {
+  try {
+    const collectionReference = collection(database, collectionKey);
+    const batch = writeBatch(database);
+
+    products.forEach((item) => {
+      const documentReference = doc(collectionReference, item[field].toLowerCase());
+      batch.set(documentReference, item);
+    })
+
+    await batch.commit();
+
+  } catch(error) {
+    throw error;
+  }
+}
 
 export const createAccountWithEmailAndPassword = async (email: string, password: string): Promise<User> => {
   try {
