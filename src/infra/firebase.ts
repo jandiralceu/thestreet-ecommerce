@@ -9,8 +9,18 @@ import {
   signInWithEmailAndPassword as signInWithEmailAndPasswordFirebase,
   onAuthStateChanged,
 } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc, collection, writeBatch } from "firebase/firestore";
-import { Product, User } from "../models";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  query as queryFirestore,
+  getDocs,
+  QuerySnapshot,
+} from "firebase/firestore";
+import { Product, ProductCategoryID, User } from "../models";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -54,43 +64,84 @@ export const createUserDocumentFromAuth = async (user: User) => {
   }
 };
 
-export const addCollectionAndDocuments = async (collectionKey: string, products: any[], field: string): Promise<void> => {
+export const addCollectionAndDocuments = async (
+  collectionKey: string,
+  products: any[],
+  field: string
+): Promise<void> => {
   try {
     const collectionReference = collection(database, collectionKey);
     const batch = writeBatch(database);
 
     products.forEach((item) => {
-      const documentReference = doc(collectionReference, item[field].toLowerCase());
+      const documentReference = doc(
+        collectionReference,
+        item[field].toLowerCase()
+      );
       batch.set(documentReference, item);
-    })
+    });
 
     await batch.commit();
-
-  } catch(error) {
+  } catch (error) {
     throw error;
   }
-}
+};
 
-export const createAccountWithEmailAndPassword = async (email: string, password: string): Promise<User> => {
+export const getCategoriesAndDocuments = async (): Promise<Map<ProductCategoryID, Product[]>> => {
   try {
-    const response = await createUserWithEmailAndPassword(auth, email, password);
+    const collectionReference = collection(database, "categories");
+    const query = queryFirestore(collectionReference);
+
+    const querySnapshot = await getDocs(query);
+
+    let result: Map<ProductCategoryID, Product[]> = new Map();
+
+    querySnapshot.docs.forEach((doc) => {
+      const { title, items } = doc.data();
+      result.set(title as ProductCategoryID, items as Product[]);
+    })
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createAccountWithEmailAndPassword = async (
+  email: string,
+  password: string
+): Promise<User> => {
+  try {
+    const response = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     return response.user;
   } catch (error: any) {
     throw error;
   }
-}
+};
 
-export const signInWithEmailAndPassword = async (email: string, password: string): Promise<User> => {
+export const signInWithEmailAndPassword = async (
+  email: string,
+  password: string
+): Promise<User> => {
   try {
-    const response = await signInWithEmailAndPasswordFirebase(auth, email, password);
+    const response = await signInWithEmailAndPasswordFirebase(
+      auth,
+      email,
+      password
+    );
     return response.user;
   } catch (error: any) {
     throw error;
   }
-}
+};
 
 export const signOut = () => signOutFirebase(auth);
 
-export const onAuthStateChangedListener = (callback: any) => onAuthStateChanged(auth, callback);
+export const onAuthStateChangedListener = (callback: any) =>
+  onAuthStateChanged(auth, callback);
 
 export { updateProfile };

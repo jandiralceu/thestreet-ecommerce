@@ -13,7 +13,7 @@ const Auth = () => {
           <Route path="login" element={<SigninPage />} />
           <Route path="register" element={<SignupPage />} />
         </Route>
-        <Route path="*" element={<SigninPage />} />
+        <Route path="*"  element={<SigninPage />} />
       </Routes>
     </div>
   );

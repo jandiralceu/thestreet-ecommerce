@@ -1,6 +1,8 @@
 import { Box, styled, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { ProductCard } from '../../components';
 import { useProductContext } from '../../contexts';
+import { RouteName } from '../../utils';
 
 const ShopContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -13,6 +15,14 @@ const ShopContainer = styled(Box)(({ theme }) => ({
       marginBottom: 12,
       textTransform: 'uppercase',
       fontWeight: theme.typography.fontWeightBold,
+    },
+
+    '& .categories': {
+      marginTop: 20,
+
+      '& li:not(:last-of-type)': {
+        marginBottom: 8,
+      }
     }
   },
 
@@ -29,15 +39,19 @@ const ShopContainer = styled(Box)(({ theme }) => ({
 }))
 
 const ShopPage = () => {
-  const { products } = useProductContext(); 
+  const { products, productCategories: categories } = useProductContext(); 
+  
   return (
     <ShopContainer>
       <Box component="section" className='filters'>
         <Typography component="h2">Category</Typography>
 
-        <ul>
-          <li>All</li>
-          <li>Hats</li>
+        <ul className="categories">
+          <li><Link to={RouteName.shop}>All</Link></li>
+          
+          {categories.map((category) => (
+            <li key={category}><Link to={RouteName.shop}>{category.toUpperCase()}</Link></li>
+          ))}
         </ul>
 
       </Box>
