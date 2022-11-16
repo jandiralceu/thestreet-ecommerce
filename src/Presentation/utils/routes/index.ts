@@ -5,4 +5,5 @@ export class RouteName {
     static shop = '/shop';
     static profile = '/profile';
     static cart = '/cart';
+    static checkout = '/checkout';
 }

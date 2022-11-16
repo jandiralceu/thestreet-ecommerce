@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Typography } from "@mui/material";
+import { Box, Collapse, Divider, Grid, Grow, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import {
   RedeemRounded as Redeem,
@@ -9,26 +9,34 @@ import { useCartContext } from "../../contexts";
 import { RouteName } from "../../utils";
 import { EmptyCart, Item } from "./components";
 import { CartPageContainer, CheckoutButton } from "./cart.styled";
+import { TransitionGroup } from "react-transition-group";
 
 const CartPage = () => {
   const { items, total, isEmpty } = useCartContext();
 
   return (
-    <>
-      {isEmpty && <EmptyCart />}
+    <Box>
+      <Grow in={isEmpty} mountOnEnter unmountOnExit>
+        <Box><EmptyCart /></Box>
+      </Grow>
+
       {!isEmpty && (
         <CartPageContainer container>
           <Grid item md={8} component="section">
             <Typography component="h2">Shopping Cart</Typography>
             <Box mt={6} className="items">
-              {items.map((item, index) => (
-                <Box mb={2}>
-                  <Item {...item} />
-                  {items.length - 1 != index && (
-                    <Divider sx={{ marginTop: 2 }} />
-                  )}
-                </Box>
-              ))}
+              <TransitionGroup>
+                {items.map((item, index) => (
+                  <Collapse key={item.id} unmountOnExit>
+                    <Box mb={2}>
+                      <Item {...item} />
+                      {items.length - 1 != index && (
+                        <Divider sx={{ marginTop: 2 }} />
+                      )}
+                    </Box>
+                  </Collapse>
+                ))}
+              </TransitionGroup>
 
               <Box className="coupon" component="section">
                 <Redeem />
@@ -75,17 +83,17 @@ const CartPage = () => {
                 justifyContent="space-between"
               >
                 <Typography component="h3">Total</Typography>
-                <Typography variant="h1">R$210</Typography>
+                <Typography variant="h2">R$210</Typography>
               </Box>
 
-              <CheckoutButton to={RouteName.home}>
+              <CheckoutButton to={RouteName.checkout}>
                 Proceed to checkout
               </CheckoutButton>
             </Box>
           </Grid>
         </CartPageContainer>
       )}
-    </>
+    </Box>
   );
 };
 

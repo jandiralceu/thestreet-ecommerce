@@ -10,43 +10,31 @@ import CartPage from "./presentation/pages/cart/cart";
 
 import { MainTheme } from "./presentation/components";
 import { RouteName } from "./presentation/utils";
-
-type CrumbProps = {
-  name: string;
-  route: string;
-}
+import CheckoutPage from "./presentation/pages/checkout/checkout";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<MainTheme />}>
+      <Route path={RouteName.home} element={<MainTheme />}>
         <Route
           index
           element={<HomePage />}
-          handle={{
-            crumb: (data: any) => ({ name: "Home", route: RouteName.home }),
-          }}
         />
         <Route
-          path="/shop"
+          path={RouteName.shop}
           element={<ShopPage />}
-          handle={{
-            crumb: (data: any) => ({ name: data.threadName, route: RouteName.shop }),
-          }}
         />
         <Route
-          path="/profile"
+          path={RouteName.profile}
           element={<ProfilePage />}
-          handle={{
-            crumb: (data: any) => ({ name: data.threadName, route: RouteName.profile }),
-          }}
         />
         <Route
-          path="/cart"
+          path={RouteName.cart}
           element={<CartPage />}
-          handle={{
-            crumb : (data: any): CrumbProps => ({ name: data.threadName, route: RouteName.cart }),
-          }}
+        />
+        <Route
+          path={RouteName.checkout}
+          element={<CheckoutPage />}
         />
       </Route>
       <Route path="/auth/*" element={<AuthPage />} />
