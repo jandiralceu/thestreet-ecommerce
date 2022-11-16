@@ -11,7 +11,7 @@ export const Container = styled(Link)(({ theme }) => ({
     alignItems: "flex-end",
 
     "&:hover > button": {
-      display: "flex",
+      opacity: 1,
     },
   },
 
@@ -32,10 +32,12 @@ export const QuickLookButton = styled("button")(() => ({
   border: "none",
   backgroundColor: "#000",
   color: "#fff",
-  display: "none",
+  display: "flex",
+  opacity: 0,
   justifyContent: "center",
   alignItems: "center",
   cursor: "pointer",
+  transition: 'opacity 0.3s ease-in',
 
   "& span": {
     marginRight: 8,

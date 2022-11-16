@@ -26,10 +26,10 @@ const LogoutButton = styled("button")(() => ({
   },
 }));
 
-const StyledNavbar = styled("nav")(({theme}) => ({
+const StyledNavbar = styled("nav")(({ theme }) => ({
   padding: "40px 0",
   display: "flex",
-  alignItems: 'center',
+  alignItems: "center",
   justifyContent: "space-between",
 
   "& ul": {
@@ -53,26 +53,26 @@ const StyledNavbar = styled("nav")(({theme}) => ({
         display: "flex",
         alignItems: "center",
 
-        '& .cart-quantity': {
-          display: 'flex',
-          position: 'relative',
+        "& .cart-quantity": {
+          display: "flex",
+          position: "relative",
 
-          '& p': {
+          "& p": {
             top: -14,
             right: -10,
             padding: 6,
             width: 20,
             height: 20,
             borderRadius: 20,
-            border: 'none',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            position: 'absolute',
-            color: '#fff',
+            border: "none",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            color: "#fff",
             fontSize: 12,
             backgroundColor: theme.palette.error.main,
-          }
+          },
         },
 
         "& span": {
@@ -85,7 +85,7 @@ const StyledNavbar = styled("nav")(({theme}) => ({
 
 export const Navbar = () => {
   const { authenticated, logout } = useUserContext();
-  const { itemsQuantity } = useCartContext();
+  const { itemsQuantity, isEmpty } = useCartContext();
 
   return (
     <StyledNavbar>
@@ -104,10 +104,18 @@ export const Navbar = () => {
       <Box>
         <ul className="secondary-menu">
           <li>
-            <Link to={RouteName.cart}>
+            <Link
+              to={RouteName.cart}
+              style={{
+                opacity: isEmpty ? 0.4 : 1,
+                transition: "opacity 0.3s ease-in",
+              }}
+            >
               <Box className="cart-quantity">
                 <ShoppingCart sx={{ width: 24 }} />
-                {!!itemsQuantity  && <Typography component="p">{itemsQuantity}</Typography>}
+                {!!itemsQuantity && (
+                  <Typography component="p">{itemsQuantity}</Typography>
+                )}
               </Box>
               <span>Cart</span>
             </Link>
