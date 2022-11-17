@@ -32,13 +32,13 @@ const userReducer = (state: IState, action: IAction<User>): IState => {
   }
 };
 
-const initialState: IState = { currentUser: null, authenticated: false };
+const INITIAL_STATE: IState = { currentUser: null, authenticated: false };
 
 export const useUserContext = () => useContext(UserContext);
 
 export const UserProvider = ({ children }: PropsWithChildren) => {
   const authService = new AuthService(new AuthRepository());
-  const [state, dispatch] = useReducer(userReducer, initialState);
+  const [state, dispatch] = useReducer(userReducer, INITIAL_STATE);
 
   const setCurrentUser = useCallback(
     (user: User | null) =>
