@@ -22,14 +22,14 @@ export enum CartActionTypes {
 }
 
 export interface IAction {
-    type: CartActionTypes;
-    payload: any;
-  }
-  
-  export interface IState {
-    shippingPrice: number
-    discount: number;
-    isEmpty: boolean;
-    cartItems: Map<number, CartItem>;
-    items: CartItem[];
-  }
+  type: CartActionTypes;
+  payload: any;
+}
+
+export interface IState {
+  shippingPrice: number;
+  discount: number;
+  isEmpty: boolean;
+  cartItems: Map<number, CartItem>;
+  items: CartItem[];
+}

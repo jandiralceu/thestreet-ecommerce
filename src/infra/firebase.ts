@@ -18,7 +18,6 @@ import {
   writeBatch,
   query as queryFirestore,
   getDocs,
-  QuerySnapshot,
 } from "firebase/firestore";
 import { Product, ProductCategoryID, User } from "../models";
 

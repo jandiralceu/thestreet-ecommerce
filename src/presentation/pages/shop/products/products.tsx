@@ -40,7 +40,7 @@ const ProductsContainer = styled(Box)(({ theme }) => ({
 }))
 
 const ProductsPage = () => {
-  const { products, productCategories: categories } = useProductContext(); 
+  const { products, categories, productsQuantity } = useProductContext(); 
   
   return (
     <ProductsContainer>
@@ -59,11 +59,11 @@ const ProductsPage = () => {
 
       <main>
         <header>
-          <Typography>Showing 1-12 of 57 results</Typography>
+          <Typography>Showing {productsQuantity} products</Typography>
         </header>
 
         <Box className='products'>
-          {products?.map((product) => <ProductCard product={product} key={product.id} />)}
+          {products.map((product) => <ProductCard product={product} key={product.id} />)}
         </Box>
       </main>
     </ProductsContainer>

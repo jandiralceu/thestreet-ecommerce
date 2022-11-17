@@ -1,4 +1,4 @@
-import { User } from "firebase/auth";
+import { User } from "../../models";
 import { IAuthRepository } from "../../repositories";
 
 export interface IAuthService {

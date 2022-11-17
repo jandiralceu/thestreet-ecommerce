@@ -1,41 +1,86 @@
-import { createContext, useContext, PropsWithChildren, useState, useEffect, useCallback } from "react";
-import { Product, ProductCategoryID } from "../../models";
+import {
+  createContext,
+  useContext,
+  PropsWithChildren,
+  useEffect,
+  useCallback,
+  useReducer,
+} from "react";
 
-import { getCategoriesAndDocuments } from "../../infra";
-
-type ProductContextProps = {
-  products?: Product[];
-  productCategories: ProductCategoryID[];
-};
+import { Product } from "../../models";
+import { ProductService } from "../../services";
+import { ProductRepository } from "../../repositories";
+import {
+  ProductContextProps,
+  IAction,
+  IState,
+  ProductActionTypes,
+} from "./product.context.props";
 
 const ProductContext = createContext<ProductContextProps>({
-  productCategories: [],
+  products: [],
+  categories: [],
+  productsQuantity: 0,
 });
+
+const productReducer = (state: IState, action: IAction): IState => {
+  switch (action.type) {
+    case ProductActionTypes.setProducts:
+      return {
+        ...state,
+        products: action.payload,
+        productsQuantity: action.payload.length
+      };
+    case ProductActionTypes.setCategories:
+      return {
+        ...state,
+        categories: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+const INITIAL_STATE: IState = {
+  products: [],
+  categories: [],
+  productsQuantity: 0,
+};
 
 export const useProductContext = () => useContext(ProductContext);
 
 export const ProductProvider = ({ children }: PropsWithChildren) => {
-  const [products, setProducts] = useState<Product[]>();
-  const [productCategories, setProductCategories] = useState<ProductCategoryID[]>([]);
+  const productService = new ProductService(new ProductRepository());
+  const [state, dispatch] = useReducer(productReducer, INITIAL_STATE);
 
   const getCategories = useCallback(async () => {
-    const productsAndCategories = await getCategoriesAndDocuments();
-    const productsValues = Array.from(productsAndCategories.values());
-    const categoriesValues = Array.from(productsAndCategories.keys());
+    const productsAndCategories = await productService.getAll();
 
-    let result: Product[] = [];
-    productsValues.forEach(product => result.push(...product));
-    
-    setProducts(result);
-    setProductCategories(categoriesValues);
-  }, [])
+    let products: Product[] = [];
+
+    Array.from(productsAndCategories.values()).forEach((product) => {
+      return products.push(...product);
+    });
+
+    dispatch({ type: ProductActionTypes.setProducts, payload: products });
+    dispatch({
+      type: ProductActionTypes.setCategories,
+      payload: Array.from(productsAndCategories.keys()),
+    });
+  }, []);
 
   useEffect(() => {
     getCategories();
-  }, [getCategories])
+  }, [getCategories]);
 
   return (
-    <ProductContext.Provider value={{ products, productCategories }}>
+    <ProductContext.Provider
+      value={{
+        products: state.products,
+        categories: state.categories,
+        productsQuantity: state.productsQuantity,
+      }}
+    >
       {children}
     </ProductContext.Provider>
   );
