@@ -1,6 +1,6 @@
 # TheStreet
 
-This is a simple shop project that I have use to test everything about react ecosystem and javascript in general.
+This is a simple ecommerce project that I have been use to test everything about react ecosystem and javascript in general.
 
 ## Installation
 
