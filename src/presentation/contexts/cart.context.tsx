@@ -2,26 +2,13 @@ import {
   createContext,
   useContext,
   PropsWithChildren,
-  useState,
   useMemo,
   useCallback,
+  useReducer,
 } from "react";
 import { CartItem, QuantityOperationType } from "../../models";
 
-type CartContextProps = {
-  itemsQuantity: number;
-  subTotal: number;
-  total: number;
-  shippingPrice: number,
-  discount: number;
-  isEmpty: boolean;
-  cartItems: Map<number, CartItem>;
-  items: CartItem[];
-  getTotalPriceByItem: (item: CartItem) => number
-  removeItem: (id: number) => void;
-  addItem: (id: number, item: CartItem) => void;
-  updateItemQuantity: (id: number, operation: QuantityOperationType) => void;
-};
+import { CartActionTypes, CartContextProps, IAction, IState } from './cart.context.props';
 
 const CartContext = createContext<CartContextProps>({
   itemsQuantity: 0,
@@ -38,13 +25,43 @@ const CartContext = createContext<CartContextProps>({
   updateItemQuantity: (id: number, operation: QuantityOperationType) => {},
 });
 
+const cartReducer = (state: IState, action: IAction): IState => {
+  switch (action.type) {
+    case CartActionTypes.setDiscount:
+      return {
+        ...state,
+        discount: action.payload,
+      }
+    case CartActionTypes.setShippingPrice:
+      return {
+        ...state,
+        shippingPrice: action.payload,
+      }
+    case CartActionTypes.addItem:
+      return {
+        ...state,
+        cartItems: action.payload,
+        items: Array.from(action.payload.values()),
+      }
+    default:
+      return state;
+  }
+}
+
+const INITIAL_STATE: IState = {
+  cartItems: new Map(),
+  discount: 0,
+  isEmpty: true,
+  items: [],
+  shippingPrice: 0,
+}
+
 export const useCartContext = () => useContext(CartContext);
 
 export const CartProvider = ({ children }: PropsWithChildren) => {
-  const [shippingPrice, setShippingPrice] = useState(0);
-  const [discount, setDiscount] = useState(0);
-  const [cartItems, setCartItems] = useState<Map<number, CartItem>>(new Map());
-  const items = useMemo(() => Array.from(cartItems.values()), [cartItems]);
+  const [state, dispatch] = useReducer(cartReducer, INITIAL_STATE);
+  const { discount, shippingPrice, cartItems, items } = state;
+
   const itemsQuantity = useMemo(() => {
     return items.reduce((quantity, item) => quantity + item.quantity, 0);
   }, [items]);
@@ -68,7 +85,7 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
       itemsCopy.set(id, item);
     }
 
-    setCartItems(itemsCopy);
+    dispatch({ type: CartActionTypes.addItem, payload: itemsCopy });
   };
 
   const updateItemQuantity = (id: number, operation: QuantityOperationType) => {
@@ -79,13 +96,15 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
 
     operation == QuantityOperationType.subtract ? currentItem.quantity-- : currentItem.quantity++;
 
-    setCartItems(itemsCopy.set(id, currentItem!));
+    dispatch({ type: CartActionTypes.addItem, payload: itemsCopy.set(id, currentItem!) })
   };
 
   const removeItem = (id: number) => {
     const itemsCopy = new Map(cartItems);
 
-    if (itemsCopy.delete(id)) setCartItems(itemsCopy);
+    if (itemsCopy.delete(id)) {
+      dispatch({ type: CartActionTypes.addItem, payload: itemsCopy });
+    }
   };
 
   return (
@@ -103,7 +122,6 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
         shippingPrice,
         discount,
         getTotalPriceByItem,
-
       }}
     >
       {children}
