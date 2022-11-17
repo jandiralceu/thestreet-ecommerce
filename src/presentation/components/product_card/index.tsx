@@ -15,6 +15,7 @@ import {
 } from "./product_card.styles";
 import { useCartContext } from "../../contexts";
 import { NumberController } from "../number_controller";
+import { RouteName } from "../../utils";
 
 type ProductCardProps = {
   product: Product;
@@ -115,7 +116,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <Container
-      to="/shop"
+      to={`${RouteName.shop}/${product.id}`}
       onMouseEnter={(_) => setShowButton(true)}
       onMouseLeave={(_) => setShowButton(false)}
       ref={containerRef}

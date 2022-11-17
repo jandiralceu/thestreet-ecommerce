@@ -21,7 +21,7 @@ function App() {
           element={<HomePage />}
         />
         <Route
-          path={RouteName.shop}
+          path={`${RouteName.shop}/*`}
           element={<ShopPage />}
         />
         <Route
