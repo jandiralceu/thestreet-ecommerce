@@ -19,5 +19,6 @@ export interface IState {
 export type ProductContextProps = {
   products: Product[];
   categories: ProductCategoryID[];
-  productsQuantity: number
+  productsQuantity: number;
+  findById: (slug: string) => Product | null
 };

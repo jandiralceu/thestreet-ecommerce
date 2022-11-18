@@ -21,6 +21,7 @@ const ProductContext = createContext<ProductContextProps>({
   products: [],
   categories: [],
   productsQuantity: 0,
+  findById: (slug: string) => null
 });
 
 const productReducer = (state: IState, action: IAction): IState => {
@@ -69,6 +70,11 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
     });
   }, []);
 
+  const findById = useCallback((slug: string): Product | null => {
+    const result = state.products.find((product) => product.id.toString() === slug);
+    return result ?? null;
+  }, [state.products]);
+
   useEffect(() => {
     getCategories();
   }, [getCategories]);
@@ -76,6 +82,7 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
   return (
     <ProductContext.Provider
       value={{
+        findById,
         products: state.products,
         categories: state.categories,
         productsQuantity: state.productsQuantity,

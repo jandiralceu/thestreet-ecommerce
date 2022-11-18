@@ -17,7 +17,7 @@ export const PriceLabel = ({
   const isPromotionalProduct = promotionalPrice && promotionalPrice < price;
 
   return (
-    <Box display="inline" {...props}>
+    <Box display="flex" alignItems="center" {...props}>
       <Typography
         component="span"
         sx={{
