@@ -4,9 +4,13 @@ import { useParams } from "react-router-dom";
 import { Product } from "../../../../models";
 import { ProductRepository } from "../../../../repositories";
 import { ProductService } from "../../../../services";
-import { NumberController, PriceLabel, ProductCard } from "../../../components";
+import {
+  HighlighProducts,
+  NumberController,
+  PriceLabel,
+} from "../../../components";
 
-import { Tabs } from './components'
+import { Tabs } from "./components";
 
 const ProductDetailsPageContainer = styled(Box)(() => ({
   display: "grid",
@@ -45,12 +49,6 @@ const ProductDetailsPageContainer = styled(Box)(() => ({
   },
 }));
 
-const RelatedProducts = styled(Box)(() => ({
-  display: "grid",
-  gap: 20,
-  gridTemplateColumns: "repeat(4, 1fr)",
-}));
-
 const productService = new ProductService(new ProductRepository());
 
 const ProductDetailsPage = () => {
@@ -61,12 +59,12 @@ const ProductDetailsPage = () => {
   const getProductBySlug = useCallback(async () => {
     const product = await productService.getBySlug(params.slug!);
     setProduct(product);
-  }, [params.slug])
+  }, [params.slug]);
 
   const getRelatedProducts = useCallback(async () => {
     const products = await productService.getRelatedProducts(params.slug!);
     setRelatedProduct(products);
-  }, [params.slug])
+  }, [params.slug]);
 
   useEffect(() => {
     getProductBySlug();
@@ -149,20 +147,17 @@ const ProductDetailsPage = () => {
           </Box>
         </Box>
       </ProductDetailsPageContainer>
-      
+
       <Tabs />
 
-      <Box component="section"  mt={6}>
-          <Typography sx={{ textTransform: "uppercase" }} mt={2}>
-            Featured Products
-          </Typography>
-
-          <RelatedProducts>
-            {relatedProducts?.map((product) => (
-              <ProductCard product={product} key={product.id} />
-            ))}
-          </RelatedProducts>
-        </Box>
+      {!!relatedProducts && (
+        <HighlighProducts
+          component="section"
+          mt={6}
+          title="Featured Products"
+          products={relatedProducts}
+        />
+      )}
     </>
   );
 };

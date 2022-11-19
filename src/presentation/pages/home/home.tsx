@@ -4,11 +4,10 @@ import { Link } from "react-router-dom";
 import { Product } from "../../../models";
 import { ProductRepository } from "../../../repositories";
 import { ProductService } from "../../../services";
-import { ProductCard } from "../../components";
+import { HighlighProducts, ProductCard } from "../../components";
 import { RouteName } from "../../utils";
 
 const productService = new ProductService(new ProductRepository());
-
 
 const Main = styled("main")(() => ({
   "& .hero": {
@@ -19,53 +18,46 @@ const Main = styled("main")(() => ({
       "highlight1 highlight2"
       "highlight1 highlight3"
     `,
-    gridTemplateColumns: '2fr 1fr',
+    gridTemplateColumns: "2fr 1fr",
 
     "& a": {
       backgroundColor: "#f3f3f3",
 
       "&.area1": {
         gridArea: "highlight1",
-        backgroundImage: `url(${require('../../assets/images/highlight_product.jpg')})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center center',
+        backgroundImage: `url(${require("../../assets/images/highlight_product.jpg")})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center center",
       },
-      
+
       "&.area2": {
         gridArea: "highlight2",
-        backgroundImage: `url(${require('../../assets/images/male.jpg')})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center center',
+        backgroundImage: `url(${require("../../assets/images/male.jpg")})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center center",
       },
 
       "&.area3": {
         gridArea: "highlight3",
-        backgroundImage: `url(${require('../../assets/images/female.jpg')})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center center',
+        backgroundImage: `url(${require("../../assets/images/female.jpg")})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center center",
       },
     },
   },
 
-  '& .welcome': {
-
-    '& p': {
-      width: '60%',
+  "& .welcome": {
+    "& p": {
+      width: "60%",
     },
-  },
-
-  '& .carrousel': {
-    display: 'grid',
-    gap: 20,
-    gridTemplateColumns: 'repeat(4, 1fr)',
   },
 }));
 
 const HomePage = () => {
-  const [highlightsProducts, setHighlightsProducts] = useState<Product[]>()
+  const [highlightsProducts, setHighlightsProducts] = useState<Product[]>();
 
   const getHighlightsProducts = useCallback(async () => {
     const result = await productService.getHomeHighlightProducts();
@@ -73,8 +65,8 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    getHighlightsProducts()
-  }, [getHighlightsProducts])
+    getHighlightsProducts();
+  }, [getHighlightsProducts]);
   return (
     <Main>
       <Box component="section" className="hero">
@@ -92,20 +84,24 @@ const HomePage = () => {
         component="section"
         className="welcome"
       >
-        <Typography variant="h4" sx={{ textTransform: 'uppercase' }}>Welcome</Typography>
+        <Typography variant="h4" sx={{ textTransform: "uppercase" }}>
+          Welcome
+        </Typography>
         <Typography component="p" sx={{ marginTop: 2, textAlign: "center" }}>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste ipsam
           veniam quidem. Sapiente, molestias. Nihil voluptate omnis quidem.
         </Typography>
       </Box>
 
-      <Box component="section">
-        <Typography sx={{ textTransform: 'uppercase' }}>Featured Products</Typography>
-
-        <Box className="carrousel" mt={2} mb={12}>
-          {highlightsProducts?.map((product) => <ProductCard product={product} key={product.id} />)}
-        </Box>
-      </Box>
+      {!!highlightsProducts && (
+        <HighlighProducts
+          title="Featured Products"
+          products={highlightsProducts}
+          component="section"
+          mt={2}
+          mb={12}
+        />
+      )}
     </Main>
   );
 };
