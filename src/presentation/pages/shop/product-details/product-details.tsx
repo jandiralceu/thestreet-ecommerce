@@ -1,10 +1,12 @@
-import { Box, Rating, styled, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Rating, styled, Typography } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Product } from "../../../../models";
 import { ProductRepository } from "../../../../repositories";
 import { ProductService } from "../../../../services";
 import { NumberController, PriceLabel, ProductCard } from "../../../components";
+
+import { Tabs } from './components'
 
 const ProductDetailsPageContainer = styled(Box)(() => ({
   display: "grid",
@@ -43,42 +45,6 @@ const ProductDetailsPageContainer = styled(Box)(() => ({
   },
 }));
 
-interface TabPanelProps {
-  index: number;
-  value: number;
-}
-
-const TabPanel = ({
-  children,
-  index,
-  value,
-  ...props
-}: React.PropsWithChildren<TabPanelProps>) => {
-  return (
-    <Box
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      paddingY={6}
-      aria-labelledby={`simple-tab-${index}`}
-      {...props}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </Box>
-  );
-};
-
-const a11yProps = (index: number) => {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-};
-
 const RelatedProducts = styled(Box)(() => ({
   display: "grid",
   gap: 20,
@@ -91,11 +57,6 @@ const ProductDetailsPage = () => {
   const params = useParams<{ slug: string }>();
   const [product, setProduct] = useState<Product>();
   const [relatedProducts, setRelatedProduct] = useState<Product[]>();
-  const [value, setValue] = useState(0);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
 
   const getProductBySlug = useCallback(async () => {
     const product = await productService.getBySlug(params.slug!);
@@ -188,66 +149,10 @@ const ProductDetailsPage = () => {
           </Box>
         </Box>
       </ProductDetailsPageContainer>
+      
+      <Tabs />
 
-      <Box mt={12} sx={{ width: "100%" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-          >
-            <Tab label="Description" {...a11yProps(0)} />
-            <Tab label="Additional Information" {...a11yProps(1)} />
-            <Tab label="Reviews" {...a11yProps(2)} />
-          </Tabs>
-        </Box>
-        <TabPanel value={value} index={0}>
-          <Typography component="p" variant="body1">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste eaque
-            dolor voluptas, cum nostrum ipsum quod assumenda incidunt vitae
-            aliquid nesciunt consequatur, blanditiis libero unde, modi molestiae
-            rerum est deleniti!
-          </Typography>
-          <br />
-          <Typography component="p" variant="body1">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste eaque
-            dolor voluptas, cum nostrum ipsum quod assumenda incidunt vitae
-            aliquid nesciunt consequatur, blanditiis libero unde, modi molestiae
-            rerum est deleniti!
-          </Typography>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <Typography component="p" variant="body1">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste eaque
-            dolor voluptas, cum nostrum ipsum quod assumenda incidunt vitae
-            aliquid nesciunt consequatur, blanditiis libero unde, modi molestiae
-            rerum est deleniti!
-          </Typography>
-          <br />
-          <Typography component="p" variant="body1">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste eaque
-            dolor voluptas, cum nostrum ipsum quod assumenda incidunt vitae
-            aliquid nesciunt consequatur, blanditiis libero unde, modi molestiae
-            rerum est deleniti!
-          </Typography>
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <Typography component="p" variant="body1">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste eaque
-            dolor voluptas, cum nostrum ipsum quod assumenda incidunt vitae
-            aliquid nesciunt consequatur, blanditiis libero unde, modi molestiae
-            rerum est deleniti!
-          </Typography>
-          <br />
-          <Typography component="p" variant="body1">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste eaque
-            dolor voluptas, cum nostrum ipsum quod assumenda incidunt vitae
-            aliquid nesciunt consequatur, blanditiis libero unde, modi molestiae
-            rerum est deleniti!
-          </Typography>
-        </TabPanel>
-
-        <Box component="section"  mt={6}>
+      <Box component="section"  mt={6}>
           <Typography sx={{ textTransform: "uppercase" }} mt={2}>
             Featured Products
           </Typography>
@@ -258,7 +163,6 @@ const ProductDetailsPage = () => {
             ))}
           </RelatedProducts>
         </Box>
-      </Box>
     </>
   );
 };
