@@ -1,3 +1,3 @@
-export function createAction<T = any, P = any>(type: T, payload: P) {
+export function createAction<T = any>(type: T, payload: any) {
   return { type, payload };
 }

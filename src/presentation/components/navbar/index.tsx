@@ -13,7 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AuthService } from "../../../services";
 import { AuthRepository } from "../../../repositories";
 import { useCallback } from "react";
-import { RootState, setCurrentUser } from "../../../store/store";
+import { setCurrentUser } from "../../../store/store";
+import { selectCurrentUser } from "../../../store/user";
 
 const LogoutButton = styled("button")(() => ({
   border: "none",
@@ -92,7 +93,7 @@ const authService = new AuthService(new AuthRepository());
 
 export const Navbar = () => {
   const dispatch = useDispatch();
-  const authenticated = useSelector((state: RootState) => state.user.authenticated)
+  const user = useSelector(selectCurrentUser)
 
   const logout = useCallback(async () => {
     try {
@@ -139,7 +140,7 @@ export const Navbar = () => {
             </Link>
           </li>
 
-          {authenticated ? (
+          {user.authenticated ? (
             <>
               <li>
                 <Link to={RouteName.profile}>

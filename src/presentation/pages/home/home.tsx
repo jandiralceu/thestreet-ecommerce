@@ -1,8 +1,14 @@
 import { Box, styled, Typography } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Product } from "../../../models";
+import { ProductRepository } from "../../../repositories";
+import { ProductService } from "../../../services";
 import { ProductCard } from "../../components";
-import { useProductContext } from "../../contexts";
 import { RouteName } from "../../utils";
+
+const productService = new ProductService(new ProductRepository());
+
 
 const Main = styled("main")(() => ({
   "& .hero": {
@@ -59,8 +65,16 @@ const Main = styled("main")(() => ({
 }));
 
 const HomePage = () => {
-  const { products } = useProductContext(); 
-  
+  const [highlightsProducts, setHighlightsProducts] = useState<Product[]>()
+
+  const getHighlightsProducts = useCallback(async () => {
+    const result = await productService.getHomeHighlightProducts();
+    setHighlightsProducts(result);
+  }, []);
+
+  useEffect(() => {
+    getHighlightsProducts()
+  }, [getHighlightsProducts])
   return (
     <Main>
       <Box component="section" className="hero">
@@ -89,7 +103,7 @@ const HomePage = () => {
         <Typography sx={{ textTransform: 'uppercase' }}>Featured Products</Typography>
 
         <Box className="carrousel" mt={2} mb={12}>
-          {products?.slice(0, 4)?.map((product) => <ProductCard product={product} key={product.id} />)}
+          {highlightsProducts?.map((product) => <ProductCard product={product} key={product.id} />)}
         </Box>
       </Box>
     </Main>

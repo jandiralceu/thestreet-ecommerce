@@ -19,7 +19,7 @@ import {
   query as queryFirestore,
   getDocs,
 } from "firebase/firestore";
-import { Product, ProductCategoryID, User } from "../models";
+import { Product, Category, User } from "../models";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -86,18 +86,19 @@ export const addCollectionAndDocuments = async (
   }
 };
 
-export const getCategoriesAndDocuments = async (): Promise<Map<ProductCategoryID, Product[]>> => {
+export const getCategoriesAndDocuments = async (): Promise<Map<Category, Product[]>> => {
   try {
     const collectionReference = collection(database, "categories");
     const query = queryFirestore(collectionReference);
 
     const querySnapshot = await getDocs(query);
 
-    let result: Map<ProductCategoryID, Product[]> = new Map();
+    const result: Map<Category, Product[]> = new Map();
 
     querySnapshot.docs.forEach((doc) => {
       const { title, items } = doc.data();
-      result.set(title as ProductCategoryID, items as Product[]);
+
+      result.set(title as Category, items as Product[]);
     })
 
     return result;

@@ -1,9 +1,10 @@
 import { Box, Rating, styled, Tab, Tabs, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Product } from "../../../../models";
+import { ProductRepository } from "../../../../repositories";
+import { ProductService } from "../../../../services";
 import { NumberController, PriceLabel, ProductCard } from "../../../components";
-import { useProductContext } from "../../../contexts";
 
 const ProductDetailsPageContainer = styled(Box)(() => ({
   display: "grid",
@@ -84,23 +85,32 @@ const RelatedProducts = styled(Box)(() => ({
   gridTemplateColumns: "repeat(4, 1fr)",
 }));
 
+const productService = new ProductService(new ProductRepository());
+
 const ProductDetailsPage = () => {
   const params = useParams<{ slug: string }>();
-  const [product, setProduct] = useState<Product | null>();
+  const [product, setProduct] = useState<Product>();
+  const [relatedProducts, setRelatedProduct] = useState<Product[]>();
   const [value, setValue] = useState(0);
-  const { products } = useProductContext();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  const { findById } = useProductContext();
+  const getProductBySlug = useCallback(async () => {
+    const product = await productService.getBySlug(params.slug!);
+    setProduct(product);
+  }, [params.slug])
+
+  const getRelatedProducts = useCallback(async () => {
+    const products = await productService.getRelatedProducts(params.slug!);
+    setRelatedProduct(products);
+  }, [params.slug])
 
   useEffect(() => {
-    const result = findById(params.slug!);
-
-    setProduct(result);
-  }, [params.slug, findById]);
+    getProductBySlug();
+    getRelatedProducts();
+  }, [getProductBySlug, getRelatedProducts]);
 
   return !product ? (
     <Box>No Product</Box>
@@ -243,7 +253,7 @@ const ProductDetailsPage = () => {
           </Typography>
 
           <RelatedProducts>
-            {products.slice(0, 4)?.map((product) => (
+            {relatedProducts?.map((product) => (
               <ProductCard product={product} key={product.id} />
             ))}
           </RelatedProducts>
