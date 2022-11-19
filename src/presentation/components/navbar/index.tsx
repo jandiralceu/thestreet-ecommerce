@@ -6,9 +6,14 @@ import {
   ExitToAppRounded as Logout,
 } from "@mui/icons-material";
 
-import { useCartContext, useUserContext } from "../../contexts";
+import { useCartContext } from "../../contexts";
 import { RouteName } from "../../utils";
 import { AppLogo } from "../app_logo";
+import { useDispatch, useSelector } from "react-redux";
+import { AuthService } from "../../../services";
+import { AuthRepository } from "../../../repositories";
+import { useCallback } from "react";
+import { RootState, setCurrentUser } from "../../../store/store";
 
 const LogoutButton = styled("button")(() => ({
   border: "none",
@@ -83,8 +88,21 @@ const StyledNavbar = styled("nav")(({ theme }) => ({
   },
 }));
 
+const authService = new AuthService(new AuthRepository());
+
 export const Navbar = () => {
-  const { authenticated, logout } = useUserContext();
+  const dispatch = useDispatch();
+  const authenticated = useSelector((state: RootState) => state.user.authenticated)
+
+  const logout = useCallback(async () => {
+    try {
+      await authService!.logout();
+      dispatch(setCurrentUser(undefined));
+    } catch (error: any) {
+      console.log(`error ${error?.message}`);
+    }
+  }, [dispatch])
+  
   const { itemsQuantity, isEmpty } = useCartContext();
 
   return (

@@ -16,12 +16,16 @@ import { DefaultText, RouteName } from "../../../utils";
 
 import { loginFormValidation } from "./login.validation";
 import { GoogleLogo } from "../../../components/svgs";
-import { useUserContext } from "../../../contexts";
+import { AuthService } from "../../../../services";
+import { AuthRepository } from "../../../../repositories";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "../../../../store/store";
 
+const authService = new AuthService(new AuthRepository());
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { authService } = useUserContext();
+  const dispatch = useDispatch();
 
   const { handleSubmit, values, handleChange, handleBlur, touched, errors, resetForm } =
     useFormik({
@@ -32,9 +36,9 @@ const LoginPage = () => {
       validationSchema: loginFormValidation(),
       onSubmit: async (values) => {
         try {
-          await authService!.login(values.email, values.password);
+          const user = await authService!.login(values.email, values.password);
           resetForm();
-
+          dispatch(setCurrentUser(user));
           navigate(RouteName.home);
         } catch (error: any) {
           console.log(`error ${error?.message}`);

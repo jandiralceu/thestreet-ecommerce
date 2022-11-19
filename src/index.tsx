@@ -13,8 +13,9 @@ import theme from "./core/theme";
 import {
   CartProvider,
   ProductProvider,
-  UserProvider,
 } from "./presentation/contexts";
+import { Provider } from "react-redux";
+import store from "./store/store";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -22,28 +23,27 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <ModalProvider rootComponent={TransitionGroup}>
-        <SnackbarProvider
-          preventDuplicate
-          maxSnack={4}
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          autoHideDuration={3000}
-        >
-          <BrowserRouter>
-            <UserProvider>
-              {/* Move ProductProvider to Shop Container  */}
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <ModalProvider rootComponent={TransitionGroup}>
+          <SnackbarProvider
+            preventDuplicate
+            maxSnack={4}
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            autoHideDuration={3000}
+          >
+            <BrowserRouter>
               <ProductProvider>
                 <CartProvider>
                   <App />
                 </CartProvider>
               </ProductProvider>
-            </UserProvider>
-          </BrowserRouter>
-        </SnackbarProvider>
-      </ModalProvider>
-    </ThemeProvider>
+            </BrowserRouter>
+          </SnackbarProvider>
+        </ModalProvider>
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>
 );
 

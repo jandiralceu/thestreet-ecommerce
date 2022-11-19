@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import HomePage from "./presentation/pages/home/home";
@@ -11,8 +11,22 @@ import CartPage from "./presentation/pages/cart/cart";
 import { MainTheme } from "./presentation/components";
 import { RouteName } from "./presentation/utils";
 import CheckoutPage from "./presentation/pages/checkout/checkout";
+import { onAuthStateChangedListener } from "./infra";
+import { User } from "./models";
+import { setCurrentUser } from "./store/store";
+import { useDispatch } from "react-redux";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChangedListener((user?: User) => {
+      dispatch(setCurrentUser(user));
+    });
+
+    return unsubscribe;
+  }, [dispatch]);
+  
   return (
     <Routes>
       <Route path={RouteName.home} element={<MainTheme />}>

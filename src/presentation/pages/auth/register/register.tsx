@@ -18,11 +18,17 @@ import { DefaultText, RouteName } from "../../../utils";
 
 import { registrationFormValidation } from "./register.validation";
 import { GoogleLogo } from "../../../components/svgs";
-import { useUserContext } from "../../../contexts";
+import { AuthService } from "../../../../services";
+import { AuthRepository } from "../../../../repositories";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "../../../../store/store";
+
+const authService = new AuthService(new AuthRepository());
+
 
 const RegisterPage = () => {
-  const { authService } = useUserContext();
-
+  const dispatch = useDispatch();
+  
   const {
     handleSubmit,
     values,
@@ -42,13 +48,13 @@ const RegisterPage = () => {
     onSubmit: async (values) => {
       try {
         const { email, password, fullName } = values;
-        const response = await authService!.registerWithEmailAndPassword(
+        const user = await authService!.registerWithEmailAndPassword(
           email,
           password,
           fullName
         );
-        console.log(response);
         resetForm();
+        dispatch(setCurrentUser(user));
       } catch (error: any) {
         console.log(`error ${error?.message}`);
       }
@@ -67,8 +73,8 @@ const RegisterPage = () => {
         <SocialButton
           onClick={async () => {
             try {
-              const response = await authService!.loginWithGoogle();
-              console.log(response);
+              const user = await authService!.loginWithGoogle();
+              dispatch(setCurrentUser(user));
             } catch (error: any) {
               console.log(`error ${error?.message}`);
             }
