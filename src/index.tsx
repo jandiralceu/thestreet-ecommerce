@@ -10,7 +10,6 @@ import "./index.scss";
 import App from "./app";
 import reportWebVitals from "./reportWebVitals";
 import theme from "./core/theme";
-import { CartProvider } from "./presentation/contexts";
 import { Provider } from "react-redux";
 import store from "./store/store";
 
@@ -31,9 +30,7 @@ root.render(
             autoHideDuration={3000}
           >
             <BrowserRouter>
-              <CartProvider>
-                <App />
-              </CartProvider>
+              <App />
             </BrowserRouter>
           </SnackbarProvider>
         </ModalProvider>

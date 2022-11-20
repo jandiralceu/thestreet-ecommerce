@@ -4,7 +4,7 @@ import {
   VisibilityRounded as QuickLook,
   CloseRounded as Close,
 } from "@mui/icons-material";
-import { Product, QuantityOperationType } from "../../../models";
+import { Product } from "../../../models";
 import { useDialog } from "../../hooks";
 import { PriceLabel } from "../price_label";
 import {
@@ -13,9 +13,10 @@ import {
   Container,
   QuickLookButton,
 } from "./product_card.styles";
-import { useCartContext } from "../../contexts";
 import { NumberController } from "../number_controller";
 import { RouteName } from "../../utils";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../../store/cart";
 
 type ProductCardProps = {
   product: Product;
@@ -26,11 +27,11 @@ const INITIAL_VALUE = 1;
 export const ProductCard = ({ product }: ProductCardProps) => {
   const [quantity, setQuantity] = useState(INITIAL_VALUE);
   const [showButton, setShowButton] = useState(false);
-  const { addItem } = useCartContext();
   const containerRef = useRef(null);
+  const dispatch = useDispatch();
 
-  const updateQuantity = (operation: QuantityOperationType) => {
-    if (operation === QuantityOperationType.add) setQuantity(quantity + 1);
+  const updateQuantity = (action: "increase" | "decrease") => {
+    if (action === "increase") setQuantity(quantity + 1);
     else {
       if (quantity == 1) return;
       setQuantity(quantity - 1);
@@ -86,17 +87,12 @@ export const ProductCard = ({ product }: ProductCardProps) => {
               <Box className="modal-controllers">
                 <NumberController
                   value={quantity}
-                  increase={() => updateQuantity(QuantityOperationType.add)}
-                  decrease={() =>
-                    updateQuantity(QuantityOperationType.subtract)
-                  }
+                  increase={() => updateQuantity("increase")}
+                  decrease={() => updateQuantity("decrease")}
                 />
                 <button
                   onClick={() => {
-                    if (quantity > 0) {
-                      addItem(product.id, { ...product, quantity });
-                    }
-
+                    dispatch(addToCart({ ...product, quantity }));
                     setQuantity(INITIAL_VALUE);
                     closeQuickLookModal();
                   }}
@@ -111,7 +107,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         </BoxModal>
       ),
     },
-    [product, quantity, addItem, setQuantity]
+    [product, quantity, updateQuantity, setQuantity]
   );
 
   return (
@@ -162,7 +158,13 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             mountOnEnter
           >
             <AddToCart
-              onClick={() => addItem(product.id, { ...product, quantity: 1 })}
+              onClick={(
+                event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+              ) => {
+                event.preventDefault();
+                event.stopPropagation();
+                dispatch(addToCart({ ...product, quantity: 1 }));
+              }}
             >
               add to cart
             </AddToCart>

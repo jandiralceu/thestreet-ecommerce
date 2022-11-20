@@ -5,15 +5,15 @@ import {
   ArrowBackRounded as Back,
 } from "@mui/icons-material";
 
-import { useCartContext } from "../../contexts";
 import { RouteName } from "../../utils";
 import { EmptyCart, Item } from "./components";
 import { CartPageContainer, CheckoutButton } from "./cart.styled";
 import { TransitionGroup } from "react-transition-group";
+import { useSelector } from "react-redux";
+import { selectCartInfo } from "../../../store/cart/cart.selector";
 
 const CartPage = () => {
-  const { items, subTotal, isEmpty, total, shippingPrice, discount } =
-    useCartContext();
+  const { items, isEmpty, shippingPrice, discount, total, subTotal } = useSelector(selectCartInfo);
 
   return (
     <Box>

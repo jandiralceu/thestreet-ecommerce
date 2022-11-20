@@ -9,8 +9,3 @@ export type Product = {
 export type CartItem = {
   quantity: number;
 } & Product;
-
-export enum QuantityOperationType {
-  add, 
-  subtract,
-}

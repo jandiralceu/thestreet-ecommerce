@@ -1,9 +1,11 @@
 import { Box, IconButton, styled, Typography } from "@mui/material";
 import { Close as Remove } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
 
-import { CartItem, QuantityOperationType } from "../../../../../models";
+import { CartItem } from "../../../../../models";
 import { NumberController } from "../../../../components";
-import { useCartContext } from "../../../../contexts";
+import { decreaseQuantity, increaseQuantity, removeFromCart } from "../../../../../store/cart";
+import { useCallback } from "react";
 
 const ItemContainer = styled(Box)(() => ({
   display: "flex",
@@ -28,12 +30,14 @@ const ItemContainer = styled(Box)(() => ({
 }));
 
 export const Item = (item: CartItem) => {
-  const { removeItem, getTotalPriceByItem, updateItemQuantity } = useCartContext();
+  const dispatch = useDispatch();
+
+  const getTotal = useCallback((item: CartItem) => item.price * item.quantity, []);
 
   return (
     <ItemContainer>
       <Box className="product-detail">
-        <IconButton onClick={() => removeItem(item.id)}>
+        <IconButton onClick={() => dispatch(removeFromCart(item.id))}>
           <Remove />
         </IconButton>
         <img src={item.imageUrl} alt={item.name} />
@@ -44,10 +48,10 @@ export const Item = (item: CartItem) => {
         <Typography component="p">R$ {item.price}</Typography>
         <NumberController
           value={item.quantity}
-          decrease={() => updateItemQuantity(item.id, QuantityOperationType.subtract)}
-          increase={() => updateItemQuantity(item.id, QuantityOperationType.add)}
+          decrease={() => dispatch(decreaseQuantity(item.id))}
+          increase={() => dispatch(increaseQuantity(item.id))}
         />
-        <Typography component="p">R$ {getTotalPriceByItem(item)}</Typography>
+        <Typography component="p">R$ {getTotal(item)}</Typography>
       </Box>
     </ItemContainer>
   );

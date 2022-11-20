@@ -10,6 +10,7 @@ const store = createStore(rootReducer, undefined, composedEnhancers);
 
 export type RootState = ReturnType<typeof store.getState>;
 
+export * from './cart';
 export * from './user';
 export * from './product';
 export * from './category';

@@ -6,7 +6,6 @@ import {
   ExitToAppRounded as Logout,
 } from "@mui/icons-material";
 
-import { useCartContext } from "../../contexts";
 import { RouteName } from "../../utils";
 import { AppLogo } from "../app_logo";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +14,7 @@ import { AuthRepository } from "../../../repositories";
 import { useCallback } from "react";
 import { setCurrentUser } from "../../../store/store";
 import { selectCurrentUser } from "../../../store/user";
+import { selectCartInfo } from "../../../store/cart/cart.selector";
 
 const LogoutButton = styled("button")(() => ({
   border: "none",
@@ -94,6 +94,7 @@ const authService = new AuthService(new AuthRepository());
 export const Navbar = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser)
+  const { isEmpty, itemsQuantity } = useSelector(selectCartInfo)
 
   const logout = useCallback(async () => {
     try {
@@ -104,8 +105,6 @@ export const Navbar = () => {
     }
   }, [dispatch])
   
-  const { itemsQuantity, isEmpty } = useCartContext();
-
   return (
     <StyledNavbar>
       <ul className="main-menu">
@@ -132,7 +131,7 @@ export const Navbar = () => {
             >
               <Box className="cart-quantity">
                 <ShoppingCart sx={{ width: 24 }} />
-                {!!itemsQuantity && (
+                {!isEmpty && (
                   <Typography component="p">{itemsQuantity}</Typography>
                 )}
               </Box>

@@ -1,9 +1,11 @@
 import { Box, Rating, styled, Typography } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Product } from "../../../../models";
 import { ProductRepository } from "../../../../repositories";
 import { ProductService } from "../../../../services";
+import { addToCart } from "../../../../store/cart";
 import {
   HighlighProducts,
   NumberController,
@@ -53,8 +55,10 @@ const productService = new ProductService(new ProductRepository());
 
 const ProductDetailsPage = () => {
   const params = useParams<{ slug: string }>();
+  const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState<Product>();
   const [relatedProducts, setRelatedProduct] = useState<Product[]>();
+  const dispatch = useDispatch();
 
   const getProductBySlug = useCallback(async () => {
     const product = await productService.getBySlug(params.slug!);
@@ -65,6 +69,17 @@ const ProductDetailsPage = () => {
     const products = await productService.getRelatedProducts(params.slug!);
     setRelatedProduct(products);
   }, [params.slug]);
+
+  const updateQuantity = useCallback(
+    (action: "increase" | "decrease") => {
+      if (action === "increase") setQuantity(quantity + 1);
+      else {
+        if (quantity == 1) return;
+        setQuantity(quantity - 1);
+      }
+    },
+    [quantity]
+  );
 
   useEffect(() => {
     getProductBySlug();
@@ -135,13 +150,17 @@ const ProductDetailsPage = () => {
           <Box mt={4} className="controls">
             <Box>
               <NumberController
-                value={1}
-                increase={() => {}}
-                decrease={() => {}}
+                value={quantity}
+                increase={() => updateQuantity("increase")}
+                decrease={() => updateQuantity("decrease")}
               />
             </Box>
 
-            <button onClick={() => {}} type="button" className="add-to-cart">
+            <button
+              onClick={() => dispatch(addToCart({ ...product, quantity }))}
+              type="button"
+              className="add-to-cart"
+            >
               Add to Cart
             </button>
           </Box>
