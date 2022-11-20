@@ -9,7 +9,7 @@ import {
   selectCategories,
   selectProducts,
   selectProductsQuantity,
-  onFetchCategoriesAsync,
+  onFetchCategoriesStart,
   setProducts,
 } from "../../../../store/store";
 import { ProductService } from "../../../../services";
@@ -67,7 +67,7 @@ const ProductsPage = () => {
 
   useEffect(() => {
     getProducts();
-    dispatch(onFetchCategoriesAsync());
+    dispatch(onFetchCategoriesStart());
   }, [dispatch, getProducts]);
 
 
