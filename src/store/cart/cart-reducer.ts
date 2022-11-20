@@ -1,7 +1,7 @@
 import { CartItem } from "../../models";
 import { CART_ACTION_TYPES } from "./cart-types";
 
-type IState = {
+export type ICartState = {
   items: Map<number, CartItem>;
   shippingPrice: number;
   discount: number;
@@ -12,16 +12,16 @@ type IAction = {
   payload: any;
 };
 
-const INITIAL_STATE: IState = {
+const INITIAL_STATE: ICartState = {
   items: new Map(),
   shippingPrice: 0,
   discount: 0,
 };
 
 export const cartReducer = (
-  state: IState = INITIAL_STATE,
+  state: ICartState = INITIAL_STATE,
   action: IAction
-): IState => {
+): ICartState => {
   switch (action.type) {
     case CART_ACTION_TYPES.ADD_TO_CART: {
       const { id, quantity, ...rest } = action.payload as CartItem;

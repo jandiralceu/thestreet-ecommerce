@@ -5,13 +5,14 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ModalProvider } from "react-modal-hook";
 import { TransitionGroup } from "react-transition-group";
 import { SnackbarProvider } from "notistack";
+import { PersistGate } from "redux-persist/integration/react";
 
 import "./index.scss";
 import App from "./app";
 import reportWebVitals from "./reportWebVitals";
 import theme from "./core/theme";
 import { Provider } from "react-redux";
-import store from "./store/store";
+import store, { persistor } from "./store/store";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -20,21 +21,23 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <ModalProvider rootComponent={TransitionGroup}>
-          <SnackbarProvider
-            preventDuplicate
-            maxSnack={4}
-            anchorOrigin={{ vertical: "top", horizontal: "right" }}
-            autoHideDuration={3000}
-          >
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-          </SnackbarProvider>
-        </ModalProvider>
-      </ThemeProvider>
+      <PersistGate persistor={persistor} loading={null}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <ModalProvider rootComponent={TransitionGroup}>
+            <SnackbarProvider
+              preventDuplicate
+              maxSnack={4}
+              anchorOrigin={{ vertical: "top", horizontal: "right" }}
+              autoHideDuration={3000}
+            >
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </SnackbarProvider>
+          </ModalProvider>
+        </ThemeProvider>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );
