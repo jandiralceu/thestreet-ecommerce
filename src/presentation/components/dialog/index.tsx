@@ -92,7 +92,7 @@ export const Dialog = ({
       <DialogContent>
         {severity ? renderIconStatus : ""}
 
-        <DialogContentText>{children}</DialogContentText>
+        <DialogContentText component="div">{children}</DialogContentText>
       </DialogContent>
 
       {!hideControls && (
