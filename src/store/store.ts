@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage";
 import logger from "redux-logger";
 import { rootReducer } from "./root-reducer";
 import { transformItemsCartMap } from "./transforms";
+import { composeWithDevToolsLogOnly } from "@redux-devtools/extension";
 
 const persistConfig = {
   key: "root",
@@ -13,8 +14,19 @@ const persistConfig = {
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-const middleWares = [logger];
-const composedEnhancers = compose(applyMiddleware(...middleWares));
+
+const middleWares: any[] = [];
+
+if (process.env.NODE_ENV !== "production") {
+    middleWares.push(logger);
+}
+
+const composeEnhancers =
+  process.env.NODE_ENV !== "production"
+    ? composeWithDevToolsLogOnly({})
+    : compose;
+
+const composedEnhancers = composeEnhancers(applyMiddleware(...middleWares));
 
 const store = createStore(persistedReducer, undefined, composedEnhancers);
 

@@ -9,7 +9,7 @@ export const transformItemsCartMap: any = createTransform<ICartState, string>(
     return JSON.stringify({ ...onSerialize, items: Array.from(onSerialize.items.values()) });
   },
   (onDeserialize, _) => {
-    /// Convert back Array to Map
+    /// Convert back into Map
     const cart = JSON.parse(onDeserialize);
     const items = new Map<number, CartItem>();
 

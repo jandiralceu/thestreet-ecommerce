@@ -60,6 +60,7 @@
     ]
   },
   "devDependencies": {
+    "@redux-devtools/extension": "^3.2.3",
     "@types/redux-logger": "^3.0.9"
   }
 }
