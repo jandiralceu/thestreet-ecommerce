@@ -1,25 +1,32 @@
-import { compose, createStore, applyMiddleware } from "redux";
-import { persistStore, persistReducer } from "redux-persist";
+import { compose, createStore, applyMiddleware, Middleware } from "redux";
+import { persistStore, persistReducer, PersistConfig } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import logger from "redux-logger";
+import { composeWithDevToolsLogOnly } from "@redux-devtools/extension";
+import thunk from "redux-thunk";
+
 import { rootReducer } from "./root-reducer";
 import { transformItemsCartMap } from "./transforms";
-import { composeWithDevToolsLogOnly } from "@redux-devtools/extension";
 
-const persistConfig = {
+export type RootState = ReturnType<typeof rootReducer>;
+
+type ExtendedPersistConfig = PersistConfig<RootState> & {
+  whitelist: (keyof RootState)[];
+};
+
+const persistConfig: ExtendedPersistConfig = {
   key: "root",
   storage,
   transforms: [transformItemsCartMap],
-  blacklist: ["user", "product", "category"],
+  whitelist: ["cart"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const middleWares: any[] = [];
-
-if (process.env.NODE_ENV !== "production") {
-    middleWares.push(logger);
-}
+const middleWares = [
+  process.env.NODE_ENV !== "production" && logger,
+  thunk,
+].filter((middleware): middleware is Middleware => Boolean(middleware));
 
 const composeEnhancers =
   process.env.NODE_ENV !== "production"
@@ -30,12 +37,11 @@ const composedEnhancers = composeEnhancers(applyMiddleware(...middleWares));
 
 const store = createStore(persistedReducer, undefined, composedEnhancers);
 
-export type RootState = ReturnType<typeof store.getState>;
-
 export * from "./cart";
 export * from "./user";
 export * from "./product";
 export * from "./category";
+
 export const persistor = persistStore(store);
 
 export default store;

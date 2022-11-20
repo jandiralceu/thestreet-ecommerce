@@ -9,12 +9,11 @@ import {
   selectCategories,
   selectProducts,
   selectProductsQuantity,
-  setCategories,
+  onFetchCategoriesAsync,
   setProducts,
 } from "../../../../store/store";
-import { CategoryService, ProductService } from "../../../../services";
+import { ProductService } from "../../../../services";
 import {
-  CategoryRepository,
   ProductRepository,
 } from "../../../../repositories";
 
@@ -53,7 +52,6 @@ const ProductsContainer = styled(Box)(({ theme }) => ({
 }));
 
 const productService = new ProductService(new ProductRepository());
-const categoriesService = new CategoryService(new CategoryRepository());
 
 const ProductsPage = () => {
   const dispatch = useDispatch();
@@ -66,15 +64,11 @@ const ProductsPage = () => {
     dispatch(setProducts(result));
   }, [dispatch]);
 
-  const getCategories = useCallback(async () => {
-    const result = await categoriesService.getAll();
-    dispatch(setCategories(result));
-  }, [dispatch]);
 
   useEffect(() => {
     getProducts();
-    getCategories();
-  }, [getCategories, getProducts]);
+    dispatch(onFetchCategoriesAsync());
+  }, [dispatch, getProducts]);
 
 
   return (
