@@ -30,7 +30,7 @@ const middleWares = [
 
 const composeEnhancers =
   process.env.NODE_ENV !== "production"
-    ? composeWithDevToolsLogOnly({})
+    ? composeWithDevToolsLogOnly({ serialize: { options: { map: true, set: true }}})
     : compose;
 
 const composedEnhancers = composeEnhancers(applyMiddleware(...middleWares));
