@@ -3,10 +3,7 @@ import { createAction } from "../../utils";
 import { CART_ACTION_TYPES } from "./cart-types";
 
 export const addToCart = (item: CartItem) => {
-  return createAction<CART_ACTION_TYPES>(
-    CART_ACTION_TYPES.ADD_TO_CART,
-    item
-  );
+  return createAction<CART_ACTION_TYPES>(CART_ACTION_TYPES.ADD_TO_CART, item);
 };
 
 export const removeFromCart = (id: number) => {
@@ -17,17 +14,11 @@ export const removeFromCart = (id: number) => {
 };
 
 export const setDiscount = (value: number) => {
-  return createAction<CART_ACTION_TYPES>(
-    CART_ACTION_TYPES.SET_DISCOUNT,
-    value
-  );
+  return createAction<CART_ACTION_TYPES>(CART_ACTION_TYPES.SET_DISCOUNT, value);
 };
 
 export const setShipping = (value: number) => {
-  return createAction<CART_ACTION_TYPES>(
-    CART_ACTION_TYPES.SET_SHIPPING,
-    value
-  );
+  return createAction<CART_ACTION_TYPES>(CART_ACTION_TYPES.SET_SHIPPING, value);
 };
 
 export const increaseQuantity = (id: number) => {
@@ -44,3 +35,6 @@ export const decreaseQuantity = (id: number) => {
   );
 };
 
+export const clearCart = () => {
+  return createAction<CART_ACTION_TYPES>(CART_ACTION_TYPES.CLEAR_CART);
+};

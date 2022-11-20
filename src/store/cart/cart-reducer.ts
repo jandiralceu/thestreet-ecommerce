@@ -79,6 +79,11 @@ export const cartReducer = (
         ...state,
         shippingPrice: action.payload,
       };
+    case CART_ACTION_TYPES.CLEAR_CART:
+      return {
+        ...state,
+        items: new Map(),
+      };
     default:
       return state;
   }
