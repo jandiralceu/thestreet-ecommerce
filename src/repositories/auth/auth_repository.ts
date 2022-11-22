@@ -1,4 +1,4 @@
-import { User } from "../../models";
+import { ICredentials, User } from "../../models";
 import {
   signInWithGooglePopup,
   createUserDocumentFromAuth,
@@ -11,7 +11,7 @@ import {
 export interface IAuthRepository {
   logout(): Promise<void>;
   loginWithGoogle(): Promise<User>;
-  login(email: string, password: string): Promise<User>;
+  login(credentials: ICredentials): Promise<User>;
   registerWithEmailAndPassword(
     email: string,
     password: string,
@@ -52,7 +52,7 @@ export class AuthRepository implements IAuthRepository {
     }
   }
 
-  async login(email: string, password: string): Promise<User> {
+  async login({ email, password }: ICredentials): Promise<User> {
     try {
       const response = await signInWithEmailAndPassword(email, password);
 

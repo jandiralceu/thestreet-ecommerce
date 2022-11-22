@@ -11,21 +11,16 @@ import CartPage from "./presentation/pages/cart/cart";
 import { MainTheme } from "./presentation/components";
 import { RouteName } from "./presentation/utils";
 import CheckoutPage from "./presentation/pages/checkout/checkout";
-import { onAuthStateChangedListener } from "./infra";
-import { User } from "./models";
-import { setCurrentUser } from "./store/store";
 import { useDispatch } from "react-redux";
+import { checkUserSession } from "./store/user";
+
 
 function App() {
-  const dispatch = useDispatch();
+  const dispath = useDispatch();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChangedListener((user?: User) => {
-      dispatch(setCurrentUser(user));
-    });
-
-    return unsubscribe;
-  }, [dispatch]);
+    dispath(checkUserSession());
+  }, [dispath]);
   
   return (
     <Routes>

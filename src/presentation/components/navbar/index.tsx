@@ -13,7 +13,7 @@ import { AuthService } from "../../../services";
 import { AuthRepository } from "../../../repositories";
 import { useCallback } from "react";
 import { setCurrentUser } from "../../../store/store";
-import { selectCurrentUser } from "../../../store/user";
+import { selectAuthenticated, selectCurrentUser } from "../../../store/user";
 import { selectCartInfo } from "../../../store/cart/cart.selector";
 
 const LogoutButton = styled("button")(() => ({
@@ -93,8 +93,9 @@ const authService = new AuthService(new AuthRepository());
 
 export const Navbar = () => {
   const dispatch = useDispatch();
-  const user = useSelector(selectCurrentUser)
-  const { isEmpty, itemsQuantity } = useSelector(selectCartInfo)
+  const user = useSelector(selectCurrentUser);
+  const isAuthenticated = useSelector(selectAuthenticated);
+  const { isEmpty, itemsQuantity } = useSelector(selectCartInfo);
 
   const logout = useCallback(async () => {
     try {
@@ -139,7 +140,7 @@ export const Navbar = () => {
             </Link>
           </li>
 
-          {user.authenticated ? (
+          {isAuthenticated ? (
             <>
               <li>
                 <Link to={RouteName.profile}>

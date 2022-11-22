@@ -36,7 +36,7 @@ const LoginPage = () => {
       validationSchema: loginFormValidation(),
       onSubmit: async (values) => {
         try {
-          const user = await authService!.login(values.email, values.password);
+          const user = await authService!.login(values);
           resetForm();
           dispatch(setCurrentUser(user));
           navigate(RouteName.home);

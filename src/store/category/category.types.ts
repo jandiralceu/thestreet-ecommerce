@@ -1,5 +1,5 @@
 export enum CATEGORY_ACTION_TYPES {
-  FETCH = 'FETCH_CATEGORIES',
-  SUCCESS = 'SUCCESS_CATEGORIES',
-  ERROR = 'ERROR_CATEGORIES',
+  FETCH = 'category/FETCH',
+  SUCCESS = 'category/SUCCESS',
+  ERROR = 'category/ERROR',
 }

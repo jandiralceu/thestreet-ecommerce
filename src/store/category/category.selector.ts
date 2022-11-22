@@ -7,5 +7,3 @@ export const selectCategories = createSelector(
   [selectCategoryReducer],
   (categoryReducer) => categoryReducer.categories
 );
-
-// export const selectCategories = (state: RootState) => state.category?.categories;
