@@ -1,7 +1,7 @@
 import { takeLatest, all, call, put } from "typed-redux-saga/macro";
 
 import { AUTH_ACTION_TYPES } from "./auth.types";
-import { signInSuccess, signInFailure } from "./auth.action";
+import { signInSuccess, authFailure, signOutSuccess } from "./auth.action";
 import { UserService, AuthService } from "../../services";
 import { UserRepository, AuthRepository } from "../../repositories";
 import { ICredentials, IRegistration } from "../../models";
@@ -15,7 +15,7 @@ function* isUserAuthenticated() {
     if (!result) return;
     yield* put(signInSuccess(result));
   } catch (error: any) {
-    yield* put(signInFailure(error?.message ?? "User not authenticated"));
+    yield* put(authFailure(error?.message ?? "User not authenticated"));
   }
 }
 
@@ -25,7 +25,7 @@ function* signInWithGoogle() {
     yield* put(signInSuccess(result));
   } catch (error: any) {
     yield* put(
-      signInFailure(error?.message ?? "Error on authenticating the user.")
+      authFailure(error?.message ?? "Error on authenticating the user.")
     );
   }
 }
@@ -36,7 +36,7 @@ function* signWithEmailAndPassword({ payload: credentials }: any) {
     yield* put(signInSuccess(result));
   } catch (error: any) {
     yield* put(
-      signInFailure(error?.message ?? "Error on authenticating the user.")
+      authFailure(error?.message ?? "Error on authenticating the user.")
     );
   }
 }
@@ -47,7 +47,18 @@ function* registerWithEmailAndPassword({ payload: userData }: any) {
     yield* put(signInSuccess(result));
   } catch (error: any) {
     yield* put(
-      signInFailure(error?.message ?? "Error on creating account.")
+      authFailure(error?.message ?? "Error on creating account.")
+    );
+  }
+}
+
+function* signOut() {
+  try {
+    yield* call(() => authServices.logout());
+    yield* put(signOutSuccess());
+  } catch(error: any) {
+    yield* put(
+      authFailure(error?.message ?? "Error on creating account.")
     );
   }
 }
@@ -74,11 +85,16 @@ function* onCheckUserSession() {
   yield* takeLatest(AUTH_ACTION_TYPES.CHECK_USER_SESSION, isUserAuthenticated);
 }
 
+function* onSignOut() {
+  yield* takeLatest(AUTH_ACTION_TYPES.SIGN_OUT, signOut);
+}
+
 export function* authSaga() {
   yield* all([
     call(onCheckUserSession),
     call(onSignInWithGoogle),
     call(onSignWithEmailAndPassword),
     call(onRegisterWithEmailAndPassword),
+    call(onSignOut),
   ]);
 }

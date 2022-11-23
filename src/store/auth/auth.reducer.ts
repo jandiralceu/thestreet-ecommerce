@@ -18,8 +18,10 @@ export const authReducer = (state: IState = INITIAL_STATE, action: IAction): ISt
   switch (action.type) {
     case AUTH_ACTION_TYPES.SIGN_IN_SUCCESS:
       return { ...state, currentUser: action.payload, loading: !state.loading }
-    case AUTH_ACTION_TYPES.SIGN_IN_FAILURE:
+    case AUTH_ACTION_TYPES.FAILURE:
       return { ...state, error: action.payload, loading: !state.loading }
+    case AUTH_ACTION_TYPES.SIGN_OUT_SUCCESS:
+      return INITIAL_STATE;
     default:
       return state;
   }

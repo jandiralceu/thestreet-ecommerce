@@ -9,9 +9,8 @@ import {
 import { RouteName } from "../../utils";
 import { AppLogo } from "../app_logo";
 import { useDispatch, useSelector } from "react-redux";
-import { useCallback } from "react";
 import { selectCartInfo } from "../../../store/cart/cart.selector";
-import { selectAuthenticated } from "../../../store/auth";
+import { selectAuthenticated, signOut } from "../../../store/auth";
 
 const LogoutButton = styled("button")(() => ({
   border: "none",
@@ -90,14 +89,6 @@ export const Navbar = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectAuthenticated);
   const { isEmpty, itemsQuantity } = useSelector(selectCartInfo);
-
-  const logout = useCallback(async () => {
-    try {
-      console.log(`logout`);
-    } catch (error: any) {
-      console.log(`error ${error?.message}`);
-    }
-  }, [dispatch])
   
   return (
     <StyledNavbar>
@@ -143,7 +134,7 @@ export const Navbar = () => {
               </li>
 
               <li>
-                <LogoutButton onClick={logout}>
+                <LogoutButton onClick={() => dispatch(signOut())}>
                   <Logout sx={{ width: 24 }} />
                   <span>Logout</span>
                 </LogoutButton>

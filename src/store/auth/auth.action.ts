@@ -23,5 +23,11 @@ export const emailAndPasswordRegistration = (userData: IRegistration) =>
 export const signInSuccess = (user: User) =>
   createAction<AUTH_ACTION_TYPES>(AUTH_ACTION_TYPES.SIGN_IN_SUCCESS, user);
 
-export const signInFailure = (error: string) =>
-  createAction<AUTH_ACTION_TYPES>(AUTH_ACTION_TYPES.SIGN_IN_FAILURE, error);
+export const authFailure = (error: string) =>
+  createAction<AUTH_ACTION_TYPES>(AUTH_ACTION_TYPES.FAILURE, error);
+
+export const signOut = () =>
+  createAction<AUTH_ACTION_TYPES>(AUTH_ACTION_TYPES.SIGN_OUT);
+
+export const signOutSuccess = () =>
+  createAction<AUTH_ACTION_TYPES>(AUTH_ACTION_TYPES.SIGN_OUT_SUCCESS);
