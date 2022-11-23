@@ -6,3 +6,10 @@ export type ICredentials = {
   email: string;
   password: string;
 };
+
+export type IRegistration = {
+  email: string;
+  password: string;
+  displayName: string;
+};
+

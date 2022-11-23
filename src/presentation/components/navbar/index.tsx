@@ -9,12 +9,9 @@ import {
 import { RouteName } from "../../utils";
 import { AppLogo } from "../app_logo";
 import { useDispatch, useSelector } from "react-redux";
-import { AuthService } from "../../../services";
-import { AuthRepository } from "../../../repositories";
 import { useCallback } from "react";
-import { setCurrentUser } from "../../../store/store";
-import { selectAuthenticated, selectCurrentUser } from "../../../store/user";
 import { selectCartInfo } from "../../../store/cart/cart.selector";
+import { selectAuthenticated } from "../../../store/auth";
 
 const LogoutButton = styled("button")(() => ({
   border: "none",
@@ -89,18 +86,14 @@ const StyledNavbar = styled("nav")(({ theme }) => ({
   },
 }));
 
-const authService = new AuthService(new AuthRepository());
-
 export const Navbar = () => {
   const dispatch = useDispatch();
-  const user = useSelector(selectCurrentUser);
   const isAuthenticated = useSelector(selectAuthenticated);
   const { isEmpty, itemsQuantity } = useSelector(selectCartInfo);
 
   const logout = useCallback(async () => {
     try {
-      await authService!.logout();
-      dispatch(setCurrentUser(undefined));
+      console.log(`logout`);
     } catch (error: any) {
       console.log(`error ${error?.message}`);
     }

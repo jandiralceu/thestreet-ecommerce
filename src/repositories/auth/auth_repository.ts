@@ -1,4 +1,4 @@
-import { ICredentials, User } from "../../models";
+import { ICredentials, IRegistration, User } from "../../models";
 import {
   signInWithGooglePopup,
   createUserDocumentFromAuth,
@@ -12,28 +12,17 @@ export interface IAuthRepository {
   logout(): Promise<void>;
   loginWithGoogle(): Promise<User>;
   login(credentials: ICredentials): Promise<User>;
-  registerWithEmailAndPassword(
-    email: string,
-    password: string,
-    name: string
-  ): Promise<User>;
+  registerWithEmailAndPassword(userData: IRegistration): Promise<User>;
 }
 
 export class AuthRepository implements IAuthRepository {
-  async registerWithEmailAndPassword(
-    email: string,
-    password: string,
-    name: string
-  ): Promise<User> {
+  async registerWithEmailAndPassword({ email, password, displayName }: IRegistration): Promise<User> {
     try {
       const response = await createAccountWithEmailAndPassword(email, password);
 
-      await updateProfile(response, { displayName: name });
+      await updateProfile(response, { displayName });
 
-      await createUserDocumentFromAuth({
-        ...response,
-        displayName: name,
-      });
+      await createUserDocumentFromAuth({ ...response, displayName,});
 
       return response;
     } catch (error) {

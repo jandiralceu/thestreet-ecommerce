@@ -42,7 +42,7 @@ const store = createStore(persistedReducer, undefined, composedEnhancers);
 
 
 export * from "./cart";
-export * from "./user";
+export * from "./auth";
 export * from "./product";
 export * from "./category";
 

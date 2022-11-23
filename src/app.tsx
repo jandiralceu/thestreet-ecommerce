@@ -12,7 +12,7 @@ import { MainTheme } from "./presentation/components";
 import { RouteName } from "./presentation/utils";
 import CheckoutPage from "./presentation/pages/checkout/checkout";
 import { useDispatch } from "react-redux";
-import { checkUserSession } from "./store/user";
+import { checkUserSession } from "./store/store";
 
 
 function App() {

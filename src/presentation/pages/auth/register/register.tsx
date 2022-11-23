@@ -1,5 +1,6 @@
 import { Box, Divider, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import {
   EmailRounded as Email,
@@ -18,17 +19,12 @@ import { DefaultText, RouteName } from "../../../utils";
 
 import { registrationFormValidation } from "./register.validation";
 import { GoogleLogo } from "../../../components/svgs";
-import { AuthService } from "../../../../services";
-import { AuthRepository } from "../../../../repositories";
-import { useDispatch } from "react-redux";
-import { setCurrentUser } from "../../../../store/store";
-
-const authService = new AuthService(new AuthRepository());
+import { emailAndPasswordRegistration, googleSignIn } from "../../../../store/store";
 
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
-  
+
   const {
     handleSubmit,
     values,
@@ -36,7 +32,6 @@ const RegisterPage = () => {
     handleBlur,
     touched,
     errors,
-    resetForm,
   } = useFormik({
     initialValues: {
       fullName: "",
@@ -45,19 +40,8 @@ const RegisterPage = () => {
       repeat_password: "",
     },
     validationSchema: registrationFormValidation(),
-    onSubmit: async (values) => {
-      try {
-        const { email, password, fullName } = values;
-        const user = await authService!.registerWithEmailAndPassword(
-          email,
-          password,
-          fullName
-        );
-        resetForm();
-        dispatch(setCurrentUser(user));
-      } catch (error: any) {
-        console.log(`error ${error?.message}`);
-      }
+    onSubmit: async ({ email, password, fullName: displayName }) => {
+      dispatch(emailAndPasswordRegistration({ email, password, displayName }));
     },
   });
 
@@ -71,14 +55,7 @@ const RegisterPage = () => {
 
       <Box marginTop={4}>
         <SocialButton
-          onClick={async () => {
-            try {
-              const user = await authService!.loginWithGoogle();
-              dispatch(setCurrentUser(user));
-            } catch (error: any) {
-              console.log(`error ${error?.message}`);
-            }
-          }}
+          onClick={() => dispatch(googleSignIn())}
           startIcon={<GoogleLogo width={24} height={24} />}
         >
           Register with Google
@@ -92,7 +69,7 @@ const RegisterPage = () => {
           id="fullName"
           label="Name"
           value={values.fullName}
-          placeholder="me@email.com"
+          placeholder="John Doe"
           onBlur={handleBlur}
           onChange={handleChange}
           error={touched.fullName && !!errors.fullName}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { EmailRounded as Email } from "@mui/icons-material";
 import { Box, Divider, Typography } from "@mui/material";
@@ -16,33 +16,22 @@ import { DefaultText, RouteName } from "../../../utils";
 
 import { loginFormValidation } from "./login.validation";
 import { GoogleLogo } from "../../../components/svgs";
-import { AuthService } from "../../../../services";
-import { AuthRepository } from "../../../../repositories";
 import { useDispatch } from "react-redux";
-import { setCurrentUser } from "../../../../store/store";
+import { emailAndPasswordSignIn, googleSignIn } from "../../../../store/store";
 
-const authService = new AuthService(new AuthRepository());
 
 const LoginPage = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { handleSubmit, values, handleChange, handleBlur, touched, errors, resetForm } =
+  const { handleSubmit, values, handleChange, handleBlur, touched, errors } =
     useFormik({
       initialValues: {
         email: "",
         password: "",
       },
       validationSchema: loginFormValidation(),
-      onSubmit: async (values) => {
-        try {
-          const user = await authService!.login(values);
-          resetForm();
-          dispatch(setCurrentUser(user));
-          navigate(RouteName.home);
-        } catch (error: any) {
-          console.log(`error ${error?.message}`);
-        }
+      onSubmit: (values) => {
+        dispatch(emailAndPasswordSignIn(values));
       },
     });
 
@@ -57,15 +46,7 @@ const LoginPage = () => {
 
       <Box marginTop={4}>
         <SocialButton
-          onClick={async () => {
-            try {
-              await authService!.loginWithGoogle();
-
-              navigate(RouteName.home);
-            } catch(error: any) {
-              console.log(`error ${error?.message}`);
-            }
-          }}
+          onClick={() => dispatch(googleSignIn())}
           startIcon={<GoogleLogo width={24} height={24} />}
         >
           Login with Google

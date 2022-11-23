@@ -1,7 +1,8 @@
 import { all, call } from "typed-redux-saga/macro";
+
+import { authSaga } from "./auth";
 import { categoriesSaga } from "./category";
-import { userSagas } from "./user";
 
 export function* rootSaga() {
-  yield* all([call(categoriesSaga), call(userSagas)]);
+  yield* all([call(categoriesSaga), call(authSaga)]);
 }
