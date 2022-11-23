@@ -1,9 +1,9 @@
 import { createTransform } from "redux-persist";
 
 import { CartItem } from "../models";
-import { ICartState } from "./cart";
+import { TCartState } from "./cart";
 
-export const transformItemsCartMap: any = createTransform<ICartState, string>(
+export const transformItemsCartMap: any = createTransform<TCartState, string>(
   (onSerialize, _) => {
     /// Converting Map into Array
     return JSON.stringify({ ...onSerialize, items: Array.from(onSerialize.items.values()) });

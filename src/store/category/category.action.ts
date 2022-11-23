@@ -1,22 +1,15 @@
 import { Category } from "../../models";
-import { createAction } from "../../utils";
+import { createAction, withMatcher } from "../../utils";
 import { CATEGORY_ACTION_TYPES } from "./category.types";
 
-export const onFetchCategoriesStart = () => {
-  return createAction<CATEGORY_ACTION_TYPES>(CATEGORY_ACTION_TYPES.FETCH);
-};
+export const onFetchCategoriesStart = withMatcher(() =>
+  createAction(CATEGORY_ACTION_TYPES.FETCH)
+);
 
-export const onFetchErrorCategories = (error: string) => {
-  return createAction<CATEGORY_ACTION_TYPES>(
-    CATEGORY_ACTION_TYPES.ERROR,
-    error
-  );
-};
+export const onFetchErrorCategories = withMatcher((error: string) =>
+  createAction(CATEGORY_ACTION_TYPES.ERROR, error)
+);
 
-export const onFetchSuccessCategories = (categories: Category[]) => {
-  return createAction<CATEGORY_ACTION_TYPES>(
-    CATEGORY_ACTION_TYPES.SUCCESS,
-    categories
-  );
-};
-
+export const onFetchSuccessCategories = withMatcher((categories: Category[]) =>
+  createAction(CATEGORY_ACTION_TYPES.SUCCESS, categories)
+);

@@ -1,40 +1,24 @@
 import { CartItem } from "../../models";
-import { createAction } from "../../utils";
+import { createAction, withMatcher } from "../../utils";
 import { CART_ACTION_TYPES } from "./cart-types";
 
-export const addToCart = (item: CartItem) => {
-  return createAction<CART_ACTION_TYPES>(CART_ACTION_TYPES.ADD_TO_CART, item);
-};
+export const addToCart = withMatcher((item: CartItem) =>
+  createAction(CART_ACTION_TYPES.ADD_TO_CART, item));
 
-export const removeFromCart = (id: number) => {
-  return createAction<CART_ACTION_TYPES>(
-    CART_ACTION_TYPES.REMOVE_FROM_CART,
-    id
-  );
-};
+export const removeFromCart = withMatcher((id: number) =>
+  createAction(CART_ACTION_TYPES.REMOVE_FROM_CART, id));
 
-export const setDiscount = (value: number) => {
-  return createAction<CART_ACTION_TYPES>(CART_ACTION_TYPES.SET_DISCOUNT, value);
-};
+export const setDiscount = withMatcher((value: number) =>
+  createAction(CART_ACTION_TYPES.SET_DISCOUNT, value));
 
-export const setShipping = (value: number) => {
-  return createAction<CART_ACTION_TYPES>(CART_ACTION_TYPES.SET_SHIPPING, value);
-};
+export const setShipping = withMatcher((value: number) =>
+  createAction(CART_ACTION_TYPES.SET_SHIPPING, value));
 
-export const increaseQuantity = (id: number) => {
-  return createAction<CART_ACTION_TYPES>(
-    CART_ACTION_TYPES.INCREASE_PRODUCT_QUANTITY,
-    id
-  );
-};
+export const increaseQuantity = withMatcher((id: number) =>
+  createAction(CART_ACTION_TYPES.INCREASE_PRODUCT_QUANTITY, id));
 
-export const decreaseQuantity = (id: number) => {
-  return createAction<CART_ACTION_TYPES>(
-    CART_ACTION_TYPES.DECREASE_PRODUCT_QUANTITY,
-    id
-  );
-};
+export const decreaseQuantity = withMatcher((id: number) =>
+  createAction(CART_ACTION_TYPES.DECREASE_PRODUCT_QUANTITY, id));
 
-export const clearCart = () => {
-  return createAction<CART_ACTION_TYPES>(CART_ACTION_TYPES.CLEAR_CART);
-};
+export const clearCart = withMatcher(() => createAction(CART_ACTION_TYPES.CLEAR_CART));
+
