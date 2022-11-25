@@ -28,6 +28,7 @@ type TextFieldProps = {
   | "name"
   | "error"
   | "helperText"
+  | "disabled"
 >;
 
 const StyledTextField = styled("label")(({ theme: Theme }) => ({

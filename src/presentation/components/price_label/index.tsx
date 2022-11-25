@@ -1,4 +1,5 @@
 import { Box, BoxProps, Typography } from "@mui/material";
+import { toMoney } from "../../utils";
 
 type PriceLabelProps = {
   price: number;
@@ -26,7 +27,7 @@ export const PriceLabel = ({
           textDecoration: isPromotionalProduct ? "line-through" : "none",
         }}
       >
-        R${price}
+        {toMoney(price)}
       </Typography>
 
       {isPromotionalProduct && (
@@ -37,7 +38,7 @@ export const PriceLabel = ({
             marginLeft: 2,
           }}
         >
-          R${promotionalPrice}
+          {toMoney(promotionalPrice)}
         </Typography>
       )}
     </Box>

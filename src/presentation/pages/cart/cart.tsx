@@ -1,16 +1,16 @@
 import { Box, Collapse, Divider, Grid, Grow, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   RedeemRounded as Redeem,
   ArrowBackRounded as Back,
 } from "@mui/icons-material";
+import { TransitionGroup } from "react-transition-group";
 
-import { RouteName } from "../../utils";
+import { RouteName, toMoney } from "../../utils";
 import { EmptyCart, Item } from "./components";
 import { CartPageContainer, CheckoutButton } from "./cart.styled";
-import { TransitionGroup } from "react-transition-group";
-import { useSelector } from "react-redux";
-import { selectCartInfo } from "../../../store/cart/cart.selector";
+import { selectCartInfo } from "../../../store/store";
 
 const CartPage = () => {
   const { items, isEmpty, shippingPrice, discount, total, subTotal } = useSelector(selectCartInfo);
@@ -67,21 +67,21 @@ const CartPage = () => {
                   <Typography component="h3">Subtotal</Typography>
                 </Box>
                 <Box>
-                  <Typography>R$ {subTotal}</Typography>
+                  <Typography>{toMoney(subTotal)}</Typography>
                 </Box>
 
                 <Box>
                   <Typography component="h3">Shipping</Typography>
                 </Box>
                 <Box>
-                  <Typography>R$ {shippingPrice}</Typography>
+                  <Typography>{toMoney(shippingPrice)}</Typography>
                 </Box>
 
                 <Box>
                   <Typography component="h3">Discount</Typography>
                 </Box>
                 <Box>
-                  <Typography>R$ {discount}</Typography>
+                  <Typography>{toMoney(discount)}</Typography>
                 </Box>
               </Box>
 
@@ -93,7 +93,7 @@ const CartPage = () => {
                 justifyContent="space-between"
               >
                 <Typography component="h3">Total</Typography>
-                <Typography variant="h2">R$ {total}</Typography>
+                <Typography variant="h2">{toMoney(total)}</Typography>
               </Box>
 
               <CheckoutButton to={RouteName.checkout}>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Product } from "../../../models";
 import { ProductRepository } from "../../../repositories";
 import { ProductService } from "../../../services";
-import { HighlighProducts, ProductCard } from "../../components";
+import { HighlighProducts } from "../../components";
 import { RouteName } from "../../utils";
 
 const productService = new ProductService(new ProductRepository());

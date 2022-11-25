@@ -63,21 +63,24 @@ export const createUserDocumentFromAuth = async (user: User) => {
   }
 };
 
-export const addCollectionAndDocuments = async (
+export type ObjectToAdd = {
+  title: string;
+};
+
+export const addCollectionAndDocuments = async <T extends ObjectToAdd>(
   collectionKey: string,
-  products: any[],
-  field: string
+  objectsToAdd: T[]
 ): Promise<void> => {
   try {
     const collectionReference = collection(database, collectionKey);
     const batch = writeBatch(database);
 
-    products.forEach((item) => {
+    objectsToAdd.forEach((object) => {
       const documentReference = doc(
         collectionReference,
-        item[field].toLowerCase()
+        object.title.toLowerCase()
       );
-      batch.set(documentReference, item);
+      batch.set(documentReference, object);
     });
 
     await batch.commit();
@@ -86,7 +89,9 @@ export const addCollectionAndDocuments = async (
   }
 };
 
-export const getCategoriesAndDocuments = async (): Promise<Map<Category, Product[]>> => {
+export const getCategoriesAndDocuments = async (): Promise<
+  Map<Category, Product[]>
+> => {
   try {
     const collectionReference = collection(database, "categories");
     const query = queryFirestore(collectionReference);
@@ -99,7 +104,7 @@ export const getCategoriesAndDocuments = async (): Promise<Map<Category, Product
       const { title, items } = doc.data();
 
       result.set(title as Category, items as Product[]);
-    })
+    });
 
     return result;
   } catch (error) {
@@ -146,10 +151,19 @@ export const onAuthStateChangedListener = (callback: any) =>
 
 export const getCurrentUser = () => {
   return new Promise((resolve, reject) => {
-    const unsubscribe = onAuthStateChanged(auth, (userAuth) => {
-      unsubscribe();
-      resolve(userAuth);
-    }, reject)
-  })
-}
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        unsubscribe();
+        resolve(userAuth);
+      },
+      reject
+    );
+  });
+};
 export { updateProfile };
+
+
+/// I'm not carrying so much about the types on this file, just because we are using Firebase and 
+/// most of the production application doesn't use firebase, they use their own api
+/// On future I'll be change firebase with my own api.
