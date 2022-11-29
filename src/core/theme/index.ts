@@ -10,7 +10,7 @@ const theme = createTheme({
     }
   },
   typography: {
-    fontFamily: "Sono, sans-serif",
+    fontFamily: "'Fira Sans', sans-serif",
     caption: {
       color: "#424242",
     },

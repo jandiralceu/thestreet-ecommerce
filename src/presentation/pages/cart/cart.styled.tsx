@@ -62,15 +62,15 @@ export const CartPageContainer = styled(Grid)(({ theme }) => ({
 }));
 
 export const CheckoutButton = styled(Link)(({ theme }) => ({
-  backgroundColor: "#000",
+  backgroundColor: theme.palette.primary.main,
+  borderRadius: 4,
   color: "#fff",
   width: "100%",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  padding: "18px 0",
+  padding: "10px 0",
   textTransform: "uppercase",
-  fontSize: 16,
+  fontSize: 14,
   marginTop: 24,
-  fontWeight: theme.typography.fontWeightBold,
 }));
