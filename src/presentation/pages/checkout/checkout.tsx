@@ -1,9 +1,18 @@
-import { useStripe, useElements } from "@stripe/react-stripe-js";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import {
   AddRounded,
   CreditCardRounded as CreditCard,
+  DirectionsWalkRounded as CollectInPerson,
 } from "@mui/icons-material";
-import { Box, Button, Card, Container, Fade, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  Fade,
+  Typography,
+} from "@mui/material";
+import { useSelector } from "react-redux";
 
 import { AppLogo, TextField } from "../../components";
 import {
@@ -18,12 +27,50 @@ import { OrderSummary, CheckoutRadio, SectionTitle } from "./components";
 import { FedexIcon, PaypalIcon } from "../../components/svgs";
 import { useFormik } from "formik";
 import { PaymentMethodOptions, ShippingMethodOptions } from "../../../models";
+import { StripeCardElement } from "@stripe/stripe-js";
+import { selectCartInfo } from "../../../store/cart";
+import { selectCurrentUser } from "../../../store/auth";
 
 const CheckoutPage = () => {
   const stripe = useStripe();
   const elements = useElements();
+  const { total } = useSelector(selectCartInfo);
+  const { currentUser } = useSelector(selectCurrentUser);
+
+
   const paymentHandler = async () => {
     if (!stripe || !elements) return;
+
+    const result = await fetch(
+      "/.netlify/functions/create_stripe_payment_intent",
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount: total }),
+      }
+    ).then((res) => res.json());
+
+    if (result) {
+      const clientSecret = result.paymentIntent.client_secret;
+      const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement) as StripeCardElement,
+          billing_details: {
+            name: currentUser!.displayName!,
+          },
+        },
+      });
+
+      if (paymentResult.error) {
+        console.log(`Error`);
+      } else {
+        if (paymentResult.paymentIntent.status === "succeeded") {
+          console.log(`Success`);
+        }
+      }
+    }
   };
 
   const { handleSubmit, values, setFieldValue } = useFormik({
@@ -32,7 +79,7 @@ const CheckoutPage = () => {
       shippingMethod: undefined,
     },
     onSubmit: (values) => {
-      console.log(values);
+      paymentHandler();
     },
   });
 
@@ -99,10 +146,15 @@ const CheckoutPage = () => {
                     value={ShippingMethodOptions.FedEx}
                     name="shipping-method"
                     onClick={() =>
-                      setFieldValue("shippingMethod", ShippingMethodOptions.FedEx)
+                      setFieldValue(
+                        "shippingMethod",
+                        ShippingMethodOptions.FedEx
+                      )
                     }
                     size="small"
-                    checked={values.shippingMethod === ShippingMethodOptions.FedEx}
+                    checked={
+                      values.shippingMethod === ShippingMethodOptions.FedEx
+                    }
                     inputProps={{
                       "aria-label": `payment by ${ShippingMethodOptions.FedEx}`,
                     }}
@@ -119,7 +171,9 @@ const CheckoutPage = () => {
                       setFieldValue("shippingMethod", ShippingMethodOptions.DHL)
                     }
                     size="small"
-                    checked={values.shippingMethod === ShippingMethodOptions.DHL}
+                    checked={
+                      values.shippingMethod === ShippingMethodOptions.DHL
+                    }
                     inputProps={{
                       "aria-label": `payment by ${ShippingMethodOptions.DHL}`,
                     }}
@@ -136,7 +190,9 @@ const CheckoutPage = () => {
                       setFieldValue("shippingMethod", ShippingMethodOptions.UPS)
                     }
                     size="small"
-                    checked={values.shippingMethod === ShippingMethodOptions.UPS}
+                    checked={
+                      values.shippingMethod === ShippingMethodOptions.UPS
+                    }
                     inputProps={{
                       "aria-label": `payment by ${ShippingMethodOptions.UPS}`,
                     }}
@@ -146,14 +202,19 @@ const CheckoutPage = () => {
                   <CheckoutRadio
                     label="Collect in person"
                     id={ShippingMethodOptions.InPerson}
-                    prefixIcon={<FedexIcon width={24} height={24} />}
+                    prefixIcon={<CollectInPerson />}
                     value={ShippingMethodOptions.InPerson}
                     name="shipping-method"
                     onClick={() =>
-                      setFieldValue("shippingMethod", ShippingMethodOptions.InPerson)
+                      setFieldValue(
+                        "shippingMethod",
+                        ShippingMethodOptions.InPerson
+                      )
                     }
                     size="small"
-                    checked={values.shippingMethod === ShippingMethodOptions.InPerson}
+                    checked={
+                      values.shippingMethod === ShippingMethodOptions.InPerson
+                    }
                     inputProps={{
                       "aria-label": `payment by ${ShippingMethodOptions.InPerson}`,
                     }}
@@ -202,15 +263,9 @@ const CheckoutPage = () => {
                 />
               </SelectPaymentContainer>
 
-              <Fade
-                in={values.paymentMethod === PaymentMethodOptions.Card}
-                unmountOnExit
-              >
+              <Fade in={values.paymentMethod === PaymentMethodOptions.Card}>
                 <CardDetailsContainer>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam
-                  quaerat mollitia animi quos deleniti minima cum placeat
-                  blanditiis suscipit vitae alias saepe illum quas totam,
-                  delectus earum rerum similique. Voluptate!Í
+                  <CardElement options={{ hidePostalCode: true }}  />
                 </CardDetailsContainer>
               </Fade>
             </PaymentMethodsContainer>
