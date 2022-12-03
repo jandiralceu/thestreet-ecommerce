@@ -2,18 +2,18 @@ import { Box, styled } from "@mui/material";
 
 export const CheckoutFormContainer = styled('form')(({ theme }) => ({
   "& header": {
-    backgroundColor: "#fafafa",
+    backgroundColor: theme.palette.grey[100],
   },
 
   "& main": {
-    marginTop: 40,
+    marginTop: 60,
     display: "grid",
     gap: 28,
     gridTemplateColumns: "1fr 320px",
 
     "& .checkout-information": {
       "& section": {
-        marginTop: 40,
+        marginBottom: 80,
         display: "grid",
         gap: 34,
         gridTemplateColumns: "200px 1fr",
@@ -21,6 +21,7 @@ export const CheckoutFormContainer = styled('form')(({ theme }) => ({
         "& h4": {
           fontSize: 14,
           textTransform: "uppercase",
+          marginBottom: 16,
           fontWeight: theme.typography.fontWeightBold,
         },
 
@@ -62,8 +63,20 @@ export const BillingAddressButton = styled("button")(({ theme }) => ({
   },
 }));
 
-export const PaymentMethodsContainer = styled(Box)(({ theme }) => ({
+export const SelectPaymentContainer = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, 1fr)',
   gap: 20,
+}));
+
+export const SelectShippingContainer = styled(Box)(({ theme }) => ({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, 1fr)',
+  gap: 20,
+}));
+
+export const PaymentMethodsContainer = styled(Box)(({ theme }) => ({}));
+
+export const CardDetailsContainer = styled(Box)(() => ({
+  marginTop: 24,
 }));
