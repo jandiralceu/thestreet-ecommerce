@@ -1,6 +1,6 @@
 import { Box, styled } from "@mui/material";
 
-export const CheckoutContainer = styled(Box)(({ theme }) => ({
+export const CheckoutFormContainer = styled('form')(({ theme }) => ({
   "& header": {
     backgroundColor: "#fafafa",
   },
@@ -60,4 +60,10 @@ export const BillingAddressButton = styled("button")(({ theme }) => ({
   "& span": {
     fontSize: 12,
   },
+}));
+
+export const PaymentMethodsContainer = styled(Box)(({ theme }) => ({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, 1fr)',
+  gap: 20,
 }));

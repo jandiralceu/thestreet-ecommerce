@@ -13,10 +13,14 @@ import reportWebVitals from "./reportWebVitals";
 import theme from "./core/theme";
 import { Provider } from "react-redux";
 import store, { persistor } from "./store/store";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY!);
 
 root.render(
   <React.StrictMode>
@@ -32,7 +36,9 @@ root.render(
               autoHideDuration={3000}
             >
               <BrowserRouter>
-                <App />
+                <Elements stripe={stripePromise}>
+                  <App />
+                </Elements>
               </BrowserRouter>
             </SnackbarProvider>
           </ModalProvider>

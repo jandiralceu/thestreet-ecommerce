@@ -35,7 +35,7 @@ const StyledTextField = styled("label")(({ theme: Theme }) => ({
   height: "48px",
   width: "100%",
   padding: "4px 12px",
-  backgroundColor: "#f5f5f5",
+  backgroundColor: theme.palette.grey[100],
   borderRadius: 6,
   display: "flex",
   alignItems: "center",
