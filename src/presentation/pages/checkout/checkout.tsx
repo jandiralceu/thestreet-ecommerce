@@ -1,4 +1,4 @@
-import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import { useStripe, useElements } from "@stripe/react-stripe-js";
 import {
   AddRounded,
   CreditCardRounded as CreditCard,
@@ -11,6 +11,7 @@ import {
   Container,
   Fade,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 
@@ -18,25 +19,30 @@ import { AppLogo, TextField } from "../../components";
 import {
   BillingAddressButton,
   CardDetailsContainer,
+  CardNumber,
+  CardExpiryWrapper,
   CheckoutFormContainer,
+  ExpirationAndCode,
   PaymentMethodsContainer,
   SelectPaymentContainer,
   SelectShippingContainer,
+  CardCvcWrapper,
 } from "./checkout.styles";
 import { OrderSummary, CheckoutRadio, SectionTitle } from "./components";
 import { FedexIcon, PaypalIcon } from "../../components/svgs";
 import { useFormik } from "formik";
 import { PaymentMethodOptions, ShippingMethodOptions } from "../../../models";
-import { StripeCardElement } from "@stripe/stripe-js";
+
 import { selectCartInfo } from "../../../store/cart";
 import { selectCurrentUser } from "../../../store/auth";
+import { useEffect } from "react";
 
 const CheckoutPage = () => {
   const stripe = useStripe();
   const elements = useElements();
   const { total } = useSelector(selectCartInfo);
   const { currentUser } = useSelector(selectCurrentUser);
-
+  const theme = useTheme();
 
   const paymentHandler = async () => {
     if (!stripe || !elements) return;
@@ -52,25 +58,25 @@ const CheckoutPage = () => {
       }
     ).then((res) => res.json());
 
-    if (result) {
-      const clientSecret = result.paymentIntent.client_secret;
-      const paymentResult = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement) as StripeCardElement,
-          billing_details: {
-            name: currentUser!.displayName!,
-          },
-        },
-      });
+    // if (result && cardNumberElement) {
+    //   const clientSecret = result.paymentIntent.client_secret;
+    //   const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+    //     payment_method: {
+    //       card: cardNumberElement,
+    //       billing_details: {
+    //         name: currentUser!.displayName!,
+    //       },
+    //     },
+    //   });
 
-      if (paymentResult.error) {
-        console.log(`Error`);
-      } else {
-        if (paymentResult.paymentIntent.status === "succeeded") {
-          console.log(`Success`);
-        }
-      }
-    }
+    //   if (paymentResult.error) {
+    //     console.log(`Error`);
+    //   } else {
+    //     if (paymentResult.paymentIntent.status === "succeeded") {
+    //       console.log(`Success`);
+    //     }
+    //   }
+    // }
   };
 
   const { handleSubmit, values, setFieldValue } = useFormik({
@@ -82,6 +88,70 @@ const CheckoutPage = () => {
       paymentHandler();
     },
   });
+
+  useEffect(() => {
+    if (values.paymentMethod === PaymentMethodOptions.Card && elements) {
+      if (!elements.getElement("cardNumber")) {
+        const cardNumberElement = elements.create("cardNumber", {
+          showIcon: true,
+          style: {
+            base: {
+              fontSize: "14px",
+              backgroundColor: theme.palette.grey[100],
+              fontFamily: "'Fira Sans', sans-serif",
+              color: theme.palette.text.primary,
+            },
+            invalid: {
+              color: theme.palette.error.main,
+            },
+          },
+        });
+        cardNumberElement.mount("#cardNumber");
+      }
+
+      if (!elements.getElement("cardExpiry")) {
+        const cardExpiryElement = elements.create("cardExpiry", {
+          style: {
+            base: {
+              fontSize: "14px",
+              backgroundColor: theme.palette.grey[100],
+              fontFamily: "'Fira Sans', sans-serif",
+            },
+            invalid: {
+              color: theme.palette.error.main,
+            },
+          },
+        });
+        cardExpiryElement.mount("#cardExpiry");
+      }
+
+      if (!elements.getElement("cardCvc")) {
+        const cardCvcElement = elements.create("cardCvc", {
+          style: {
+            base: {
+              fontSize: "14px",
+              backgroundColor: theme.palette.grey[100],
+              fontFamily: "'Fira Sans', sans-serif",
+            },
+            invalid: {
+              color: theme.palette.error.main,
+            },
+          },
+        });
+        cardCvcElement.mount("#cardCvc");
+      }
+    } else {
+      if (elements) {
+        const cardNumberElement = elements.getElement("cardNumber");
+        const cardExpiryElement = elements.getElement("cardExpiry");
+        const cardCvcElement = elements.getElement("cardCvc");
+
+        if (cardNumberElement) cardNumberElement.destroy();
+        if (cardExpiryElement) cardExpiryElement.destroy();
+        if (cardCvcElement) cardCvcElement.destroy();
+      }
+    }
+  }, [elements, values.paymentMethod, theme]);
 
   return (
     <CheckoutFormContainer onSubmit={handleSubmit}>
@@ -265,7 +335,22 @@ const CheckoutPage = () => {
 
               <Fade in={values.paymentMethod === PaymentMethodOptions.Card}>
                 <CardDetailsContainer>
-                  <CardElement options={{ hidePostalCode: true }}  />
+                  <CardNumber>
+                    <Typography component="span">Card number</Typography>
+                    <Box id="cardNumber" />
+                  </CardNumber>
+
+                  <ExpirationAndCode>
+                    <CardExpiryWrapper>
+                      <Typography component="span">Exp. Date</Typography>
+                      <Box id="cardExpiry" />
+                    </CardExpiryWrapper>
+
+                    <CardCvcWrapper>
+                      <Typography component="span">Code</Typography>
+                      <Box id="cardCvc" />
+                    </CardCvcWrapper>
+                  </ExpirationAndCode>
                 </CardDetailsContainer>
               </Fade>
             </PaymentMethodsContainer>

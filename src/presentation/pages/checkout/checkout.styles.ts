@@ -1,6 +1,6 @@
 import { Box, styled } from "@mui/material";
 
-export const CheckoutFormContainer = styled('form')(({ theme }) => ({
+export const CheckoutFormContainer = styled("form")(({ theme }) => ({
   "& header": {
     backgroundColor: theme.palette.grey[100],
   },
@@ -64,19 +64,76 @@ export const BillingAddressButton = styled("button")(({ theme }) => ({
 }));
 
 export const SelectPaymentContainer = styled(Box)(({ theme }) => ({
-  display: 'grid',
-  gridTemplateColumns: 'repeat(2, 1fr)',
+  display: "grid",
+  gridTemplateColumns: "repeat(2, 1fr)",
   gap: 20,
 }));
 
 export const SelectShippingContainer = styled(Box)(({ theme }) => ({
-  display: 'grid',
-  gridTemplateColumns: 'repeat(2, 1fr)',
+  display: "grid",
+  gridTemplateColumns: "repeat(2, 1fr)",
   gap: 20,
 }));
 
 export const PaymentMethodsContainer = styled(Box)(({ theme }) => ({}));
 
-export const CardDetailsContainer = styled(Box)(() => ({
+export const CardDetailsContainer = styled('div')(() => ({
   marginTop: 24,
+  display: "grid",
+  gridTemplateColumns: "220px 200px",
+  justifyContent: "space-between"
 }));
+
+export const CardNumber = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.grey[100],
+  padding: 10,
+  borderRadius: 6,
+  display: 'flex',
+  flexDirection: 'column',
+
+  "& span": {
+    fontSize: 10,
+    marginBottom: 2,
+    color: theme.palette.primary.dark,
+    fontWeight: theme.typography.fontWeightBold,
+  }
+}));
+
+export const ExpirationAndCode = styled('div')(({ theme }) => ({
+  display: "grid",
+  gap: 8,
+  gridTemplateColumns: "82px 60px",
+  justifyContent: "flex-end"
+}));
+
+export const CardExpiryWrapper = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.grey[100],
+  padding: 10,
+  borderRadius: 6,
+  display: 'flex',
+  flexDirection: 'column',
+
+  "& span": {
+    fontSize: 10,
+    marginBottom: 2,
+    color: theme.palette.primary.dark,
+    fontWeight: theme.typography.fontWeightBold,
+  }
+}));
+
+export const CardCvcWrapper = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.grey[100],
+  padding: 10,
+  borderRadius: 6,
+  display: 'flex',
+  flexDirection: 'column',
+  
+  "& span": {
+    fontSize: 10,
+    marginBottom: 2,
+    color: theme.palette.primary.dark,
+    fontWeight: theme.typography.fontWeightBold,
+  }
+}));
+
+
