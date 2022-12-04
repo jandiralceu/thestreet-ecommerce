@@ -129,16 +129,6 @@ const CheckoutPage = () => {
         });
         cardCvcElement.mount("#cardCvc");
       }
-    } else {
-      if (elements) {
-        const cardNumberElement = elements.getElement("cardNumber");
-        const cardExpiryElement = elements.getElement("cardExpiry");
-        const cardCvcElement = elements.getElement("cardCvc");
-
-        if (cardNumberElement) cardNumberElement.destroy();
-        if (cardExpiryElement) cardExpiryElement.destroy();
-        if (cardCvcElement) cardCvcElement.destroy();
-      }
     }
   }, [elements, values.paymentMethod, customStripeStyles]);
 
