@@ -35,7 +35,8 @@ import { PaymentMethodOptions, ShippingMethodOptions } from "../../../models";
 
 import { selectCartInfo } from "../../../store/cart";
 import { selectCurrentUser } from "../../../store/auth";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { StripeElementStyle } from "@stripe/stripe-js";
 
 const CheckoutPage = () => {
   const stripe = useStripe();
@@ -43,6 +44,20 @@ const CheckoutPage = () => {
   const { total } = useSelector(selectCartInfo);
   const { currentUser } = useSelector(selectCurrentUser);
   const theme = useTheme();
+
+  const customStripeStyles = useMemo((): StripeElementStyle => {
+    return {
+      base: {
+        fontSize: "14px",
+        backgroundColor: theme.palette.grey[100],
+        fontFamily: "'Fira Sans', sans-serif",
+        color: theme.palette.text.primary,
+      },
+      invalid: {
+        color: theme.palette.error.main,
+      },
+    }
+  }, [theme]);
 
   const paymentHandler = async () => {
     if (!stripe || !elements) return;
@@ -58,25 +73,27 @@ const CheckoutPage = () => {
       }
     ).then((res) => res.json());
 
-    // if (result && cardNumberElement) {
-    //   const clientSecret = result.paymentIntent.client_secret;
-    //   const paymentResult = await stripe.confirmCardPayment(clientSecret, {
-    //     payment_method: {
-    //       card: cardNumberElement,
-    //       billing_details: {
-    //         name: currentUser!.displayName!,
-    //       },
-    //     },
-    //   });
+    const cardNumberElement = elements.getElement("cardNumber");
 
-    //   if (paymentResult.error) {
-    //     console.log(`Error`);
-    //   } else {
-    //     if (paymentResult.paymentIntent.status === "succeeded") {
-    //       console.log(`Success`);
-    //     }
-    //   }
-    // }
+    if (result && cardNumberElement) {
+      const clientSecret = result.paymentIntent.client_secret;
+      const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardNumberElement,
+          billing_details: {
+            name: currentUser!.displayName!,
+          },
+        },
+      });
+
+      if (paymentResult.error) {
+        console.log(`Error`);
+      } else {
+        if (paymentResult.paymentIntent.status === "succeeded") {
+          console.log(`Success`);
+        }
+      }
+    }
   };
 
   const { handleSubmit, values, setFieldValue } = useFormik({
@@ -94,49 +111,21 @@ const CheckoutPage = () => {
       if (!elements.getElement("cardNumber")) {
         const cardNumberElement = elements.create("cardNumber", {
           showIcon: true,
-          style: {
-            base: {
-              fontSize: "14px",
-              backgroundColor: theme.palette.grey[100],
-              fontFamily: "'Fira Sans', sans-serif",
-              color: theme.palette.text.primary,
-            },
-            invalid: {
-              color: theme.palette.error.main,
-            },
-          },
+          style: customStripeStyles,
         });
         cardNumberElement.mount("#cardNumber");
       }
 
       if (!elements.getElement("cardExpiry")) {
         const cardExpiryElement = elements.create("cardExpiry", {
-          style: {
-            base: {
-              fontSize: "14px",
-              backgroundColor: theme.palette.grey[100],
-              fontFamily: "'Fira Sans', sans-serif",
-            },
-            invalid: {
-              color: theme.palette.error.main,
-            },
-          },
+          style: customStripeStyles,
         });
         cardExpiryElement.mount("#cardExpiry");
       }
 
       if (!elements.getElement("cardCvc")) {
         const cardCvcElement = elements.create("cardCvc", {
-          style: {
-            base: {
-              fontSize: "14px",
-              backgroundColor: theme.palette.grey[100],
-              fontFamily: "'Fira Sans', sans-serif",
-            },
-            invalid: {
-              color: theme.palette.error.main,
-            },
-          },
+          style: customStripeStyles,
         });
         cardCvcElement.mount("#cardCvc");
       }
@@ -151,7 +140,7 @@ const CheckoutPage = () => {
         if (cardCvcElement) cardCvcElement.destroy();
       }
     }
-  }, [elements, values.paymentMethod, theme]);
+  }, [elements, values.paymentMethod, customStripeStyles]);
 
   return (
     <CheckoutFormContainer onSubmit={handleSubmit}>
