@@ -11,12 +11,23 @@ export const CheckoutFormContainer = styled("form")(({ theme }) => ({
     gap: 28,
     gridTemplateColumns: "1fr 320px",
 
+    [theme.breakpoints.down('md')]: {
+      display: "flex",
+      flexDirection: "column-reverse"
+    },
+
     "& .checkout-information": {
       "& section": {
         marginBottom: 80,
         display: "grid",
         gap: 34,
         gridTemplateColumns: "200px 1fr",
+
+        [theme.breakpoints.down('md')]: {
+          display: "flex",
+          flexDirection: "column",
+          marginBottom: 30,
+        },
 
         "& h4": {
           fontSize: 14,
@@ -29,6 +40,11 @@ export const CheckoutFormContainer = styled("form")(({ theme }) => ({
           gap: 12,
           display: "grid",
           gridTemplateColumns: "repeat(2, 1fr)",
+
+          [theme.breakpoints.down('sm')]: {
+            display: "flex",
+            flexDirection: "column",
+          },
         },
 
         "& .shipping-address": {
@@ -36,6 +52,11 @@ export const CheckoutFormContainer = styled("form")(({ theme }) => ({
             "& .fields-row": {
               gap: 12,
               display: "flex",
+              marginTop: 12,
+
+              [theme.breakpoints.down('sm')]: {
+                flexDirection: "column",
+              },
             },
           },
         },
@@ -44,6 +65,19 @@ export const CheckoutFormContainer = styled("form")(({ theme }) => ({
 
     "& .order-summary": {
       padding: "12px 20px",
+
+      [theme.breakpoints.down('md')]: {
+        border: 'none',
+        boxShadow: "none",
+        padding: 0,
+      },
+
+
+      '& button[type=submit]': {
+        [theme.breakpoints.down('md')]: {
+          display: "none"
+        },
+      }
     },
   },
 }));
@@ -67,12 +101,22 @@ export const SelectPaymentContainer = styled(Box)(({ theme }) => ({
   display: "grid",
   gridTemplateColumns: "repeat(2, 1fr)",
   gap: 20,
+
+  [theme.breakpoints.down('sm')]: {
+    display: "flex",
+    flexDirection: "column",
+  },
 }));
 
 export const SelectShippingContainer = styled(Box)(({ theme }) => ({
   display: "grid",
   gridTemplateColumns: "repeat(2, 1fr)",
   gap: 20,
+
+  [theme.breakpoints.down('sm')]: {
+    display: "flex",
+    flexDirection: "column",
+  },
 }));
 
 export const PaymentMethodsContainer = styled(Box)(({ theme }) => ({}));

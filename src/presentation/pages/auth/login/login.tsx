@@ -1,24 +1,41 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
 import { EmailRounded as Email } from "@mui/icons-material";
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Divider, styled, Typography } from "@mui/material";
 
 import { SocialButton } from "../components";
 
-import "./login.styles.scss";
 import {
   PasswordTextField,
   SubmitButton,
   TextField,
 } from "../../../components";
-import { DefaultText, RouteName } from "../../../utils";
+import { RouteName } from "../../../utils";
 
 import { loginFormValidation } from "./login.validation";
 import { GoogleLogo } from "../../../components/svgs";
-import { useDispatch } from "react-redux";
 import { emailAndPasswordSignIn, googleSignIn } from "../../../../store/store";
 
+const SigninSection = styled("section")(({ theme }) => ({
+  "& h2": {
+    fontSize: 24,
+    fontWeight: theme.typography.fontWeightBold,
+  },
+
+  "& form": {
+    "& .forgot-password": {
+      textDecoration: "underline",
+    },
+  },
+
+  "& .registration-link": {
+    "& a": {
+      fontWeight: theme.typography.fontWeightBold,
+      textDecoration: "underline",
+    },
+  },
+}));
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -36,8 +53,8 @@ const LoginPage = () => {
     });
 
   return (
-    <section>
-      <Typography variant="h1">Sign into {DefaultText.appName}</Typography>
+    <SigninSection>
+      <Typography component="h2">Sign in</Typography>
 
       <Typography variant="caption" component="p" marginTop={2}>
         Welcome back! Sign in with your data that you entered during
@@ -99,15 +116,11 @@ const LoginPage = () => {
       </Box>
 
       <Box marginTop={4} sx={{ textAlign: "center" }}>
-        <Typography
-          variant="caption"
-          component="p"
-          className="registration-link"
-        >
+        <Typography variant="caption" className="registration-link">
           Don't have an account? <Link to={RouteName.register}>Register</Link>
         </Typography>
       </Box>
-    </section>
+    </SigninSection>
   );
 };
 

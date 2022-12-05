@@ -1,10 +1,14 @@
 import { Box, Fade, styled, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
+
 import { selectCartInfo } from "../../../../../store/store";
 import { TextField } from "../../../../components";
 import { toMoney } from "../../../../utils";
 
 const OrderSummaryContainer = styled(Box)(({ theme }) => ({
+  [theme.breakpoints.down('md')]: {
+  },
+
   "& .title": {
     textTransform: "uppercase",
     fontWeight: theme.typography.fontWeightBold,
@@ -55,6 +59,10 @@ const OrderSummaryContainer = styled(Box)(({ theme }) => ({
     display: "flex",
     flexDirection: "column",
 
+    [theme.breakpoints.down('md')]: {
+      display: "none",
+    },
+
     "& li": {
       display: "flex",
       justifyContent: "space-between",
@@ -77,6 +85,14 @@ const OrderSummaryContainer = styled(Box)(({ theme }) => ({
     },
   },
 }));
+
+const DiscountContainer = styled(Box)(({ theme}) => ({
+  marginTop: 14,
+
+  [theme.breakpoints.down('md')]: {
+    display: "none",
+  },
+}))
 
 export const OrderSummary = () => {
   const { items, shippingPrice, discount, total, subTotal } =
@@ -119,9 +135,9 @@ export const OrderSummary = () => {
         ))}
       </ul>
 
-      <Box mt={2}>
+      <DiscountContainer>
         <TextField type="text" label="Discount code" disabled />
-      </Box>
+      </DiscountContainer>
 
       <Box className="price-info" component="ul" mt={3}>
         <li>

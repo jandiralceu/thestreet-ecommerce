@@ -14,7 +14,7 @@ const StyledMuiButton = styled(MuiButton)(({ theme }) => ({
 
 export const SubmitButton = ({ children, ...props }: ButtonProps) => {
   return (
-    <StyledMuiButton type="submit" variant="contained" color="secondary" {...props}>
+    <StyledMuiButton type="submit" variant="contained" color="primary" {...props}>
       {children}
     </StyledMuiButton>
   );

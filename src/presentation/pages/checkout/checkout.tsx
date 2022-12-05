@@ -9,6 +9,7 @@ import {
   Button,
   Card,
   Container,
+  Fab,
   Fade,
   Typography,
   useTheme,
@@ -168,7 +169,7 @@ const CheckoutPage = () => {
                   <TextField type="text" label="Street address" />
                 </Box>
 
-                <Box className="fields-row" mt={2}>
+                <Box className="fields-row">
                   <TextField type="text" label="Zip Code" />
                   <TextField type="text" label="City" />
                   <TextField type="text" label="Country" />
@@ -184,7 +185,7 @@ const CheckoutPage = () => {
                 </BillingAddressButton>
               </Box>
 
-              <Box mt={5}>
+              <Box>
                 <Typography component="h4">Shipping method</Typography>
 
                 <SelectShippingContainer>

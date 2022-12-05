@@ -1,4 +1,4 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Divider, styled, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
@@ -14,13 +14,25 @@ import {
   TextField,
 } from "../../../components";
 
-import "./register.styles.scss";
 import { DefaultText, RouteName } from "../../../utils";
 
 import { registrationFormValidation } from "./register.validation";
 import { GoogleLogo } from "../../../components/svgs";
 import { emailAndPasswordRegistration, googleSignIn } from "../../../../store/store";
 
+const RegisterSection = styled("section")(({ theme }) => ({
+  "& h2": {
+    fontSize: 24,
+    fontWeight: theme.typography.fontWeightBold,
+  },
+
+  "& .login-link": {
+    "& a": {
+      fontWeight: theme.typography.fontWeightBold,
+      textDecoration: "underline",
+    },
+  },
+}));
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -46,11 +58,11 @@ const RegisterPage = () => {
   });
 
   return (
-    <section>
-      <Typography variant="h1">Register into {DefaultText.appName}</Typography>
+    <RegisterSection>
+      <Typography component="h2">Register</Typography>
 
-      <Typography variant="caption" component="p" marginTop={2}>
-        Hi, There! Register into CRWN, choosing one of the options bellow.
+      <Typography variant="caption" marginTop={2}>
+        Hi, There! Register into {DefaultText.appName}, choosing one of the options bellow.
       </Typography>
 
       <Box marginTop={4}>
@@ -127,7 +139,7 @@ const RegisterPage = () => {
           Already have an account? <Link to={RouteName.login}>Login</Link>
         </Typography>
       </Box>
-    </section>
+    </RegisterSection>
   );
 };
 

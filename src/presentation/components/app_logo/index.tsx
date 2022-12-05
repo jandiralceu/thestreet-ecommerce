@@ -4,6 +4,7 @@ import { DefaultText, RouteName } from "../../utils";
 
 const Logo = styled('h1')(({ theme }) => ({
     fontSize: 34,
+    color: theme.palette.primary.main,
     fontWeight: theme.typography.fontWeightBold,
     fontFamily: "'Dancing Script', sans-serif",
 }))
