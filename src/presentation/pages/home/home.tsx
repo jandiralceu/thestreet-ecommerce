@@ -1,60 +1,15 @@
-import { Box, styled, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Product } from "../../../models";
 import { ProductRepository } from "../../../repositories";
 import { ProductService } from "../../../services";
 import { HighlighProducts } from "../../components";
-import { RouteName } from "../../utils";
+import { routeAnimationProps, RouteName } from "../../utils";
+
+import { Main } from "./home.styles";
 
 const productService = new ProductService(new ProductRepository());
-
-const Main = styled("main")(() => ({
-  "& .hero": {
-    display: "grid",
-    height: "50vh",
-    gap: 20,
-    gridTemplateAreas: `
-      "highlight1 highlight2"
-      "highlight1 highlight3"
-    `,
-    gridTemplateColumns: "2fr 1fr",
-
-    "& a": {
-      backgroundColor: "#f3f3f3",
-
-      "&.area1": {
-        gridArea: "highlight1",
-        backgroundImage: `url(${require("../../assets/images/highlight_product.jpg")})`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundPosition: "center center",
-      },
-
-      "&.area2": {
-        gridArea: "highlight2",
-        backgroundImage: `url(${require("../../assets/images/male.jpg")})`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundPosition: "center center",
-      },
-
-      "&.area3": {
-        gridArea: "highlight3",
-        backgroundImage: `url(${require("../../assets/images/female.jpg")})`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundPosition: "center center",
-      },
-    },
-  },
-
-  "& .welcome": {
-    "& p": {
-      width: "60%",
-    },
-  },
-}));
 
 const HomePage = () => {
   const [highlightsProducts, setHighlightsProducts] = useState<Product[]>();
@@ -68,7 +23,7 @@ const HomePage = () => {
     getHighlightsProducts();
   }, [getHighlightsProducts]);
   return (
-    <Main>
+    <Main {...routeAnimationProps}>
       <Box component="section" className="hero">
         <Link to={RouteName.shop} className="area1"></Link>
         <Link to={RouteName.shop} className="area2"></Link>

@@ -1,13 +1,15 @@
 import { Box, Collapse, Divider, Grid, Grow, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { motion } from "framer-motion";
+
 import {
   RedeemRounded as Redeem,
   ArrowBackRounded as Back,
 } from "@mui/icons-material";
 import { TransitionGroup } from "react-transition-group";
 
-import { RouteName, toMoney } from "../../utils";
+import { routeAnimationProps, RouteName, toMoney } from "../../utils";
 import { EmptyCart, Item } from "./components";
 import { CartPageContainer, CheckoutButton } from "./cart.styled";
 import { selectCartInfo } from "../../../store/store";
@@ -16,7 +18,7 @@ const CartPage = () => {
   const { items, isEmpty, shippingPrice, discount, total, subTotal } = useSelector(selectCartInfo);
 
   return (
-    <Box>
+    <motion.div {...routeAnimationProps}>
       <Grow in={isEmpty} mountOnEnter unmountOnExit>
         <Box>
           <EmptyCart />
@@ -103,7 +105,7 @@ const CartPage = () => {
           </Grid>
         </CartPageContainer>
       )}
-    </Box>
+    </motion.div>
   );
 };
 

@@ -1,7 +1,9 @@
-import { Box, Rating, styled, Typography } from "@mui/material";
+import { Box, Rating, Typography } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import { motion } from "framer-motion";
+
 import { Product } from "../../../../models";
 import { ProductRepository } from "../../../../repositories";
 import { ProductService } from "../../../../services";
@@ -11,45 +13,10 @@ import {
   NumberController,
   PriceLabel,
 } from "../../../components";
+import { routeAnimationProps } from "../../../utils";
 
 import { Tabs } from "./components";
-
-const ProductDetailsPageContainer = styled(Box)(() => ({
-  display: "grid",
-  gridTemplateColumns: "repeat(2, 1fr)",
-  gap: 50,
-
-  "& .images": {
-    display: "grid",
-    height: 460,
-    gap: 12,
-    gridTemplateColumns: "160px 1fr",
-
-    "& img": {
-      width: "100%",
-    },
-
-    "& .miniatures": {
-      display: "grid",
-      gap: 12,
-      gridTemplateColumn: "1fr",
-    },
-  },
-
-  "& .controls": {
-    display: "flex",
-    width: 420,
-
-    "& .add-to-cart": {
-      border: "none",
-      textTransform: "uppercase",
-      backgroundColor: "#000",
-      color: "#fff",
-      width: "100%",
-      cursor: "pointer",
-    },
-  },
-}));
+import { ProductDetailsPageContainer } from "./product_details.styles";
 
 const productService = new ProductService(new ProductRepository());
 
@@ -87,10 +54,10 @@ const ProductDetailsPage = () => {
   }, [getProductBySlug, getRelatedProducts]);
 
   return !product ? (
-    <Box>No Product</Box>
+    <motion.div {...routeAnimationProps}>No Product</motion.div>
   ) : (
-    <>
-      <ProductDetailsPageContainer>
+    <motion.div {...routeAnimationProps}>
+      <ProductDetailsPageContainer >
         <Box component="section" className="images">
           <Box className="miniatures">
             <Box
@@ -177,7 +144,7 @@ const ProductDetailsPage = () => {
           products={relatedProducts}
         />
       )}
-    </>
+    </motion.div>
   );
 };
 

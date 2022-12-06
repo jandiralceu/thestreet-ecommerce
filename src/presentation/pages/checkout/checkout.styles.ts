@@ -1,6 +1,7 @@
 import { Box, styled } from "@mui/material";
+import { motion } from "framer-motion";
 
-export const CheckoutFormContainer = styled("form")(({ theme }) => ({
+export const CheckoutFormContainer = styled(motion.form)(({ theme }) => ({
   "& header": {
     backgroundColor: theme.palette.grey[100],
   },

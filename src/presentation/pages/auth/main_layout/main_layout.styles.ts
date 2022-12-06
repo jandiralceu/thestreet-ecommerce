@@ -1,6 +1,7 @@
 import { Card, styled } from "@mui/material";
+import { motion } from 'framer-motion';
 
-export const SectionContainer = styled("section")(({ theme }) => ({
+export const SectionContainer = styled(motion.section)(({ theme }) => ({
   minHeight: "100vh",
   display: "flex",
   alignItems: "center",
@@ -12,9 +13,18 @@ export const SectionContainer = styled("section")(({ theme }) => ({
     padding: '0 20px',
   },
 
+  "& .mobile-download-app": {
+    marginTop: 20,
+  },
+
   "& .all-rights-text": {
-    margin: '20px',
+    margin: '20px 0 ',
     fontSize: 12,
+
+    "& a": {
+      marginLeft: 4,
+      color: theme.palette.primary.light,
+    },
   },
 }));
 

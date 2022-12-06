@@ -40,12 +40,12 @@ const StyledTextField = styled("label")(({ theme: Theme }) => ({
   display: "flex",
   alignItems: "center",
   color: theme.typography.caption.color,
-  transition: "border 0.2s ease-out",
   cursor: "text",
-  
+  transition: "border 0.2s ease",
 
   "&.focused": {
     border: `1px solid ${theme.palette.primary.light}`,
+    
   },
 
   "&.error": {
@@ -126,13 +126,18 @@ export const PasswordTextField = ({
   id,
   error,
   helperText,
+  onBlur,
   ...props
 }: Omit<TextFieldProps, "startAdornment" | "endAdornment" | "type">) => {
   const [visibility, setVisibility] = React.useState(false);
+  const [isFocus, setIsFocus] = useState(false);
 
   return (
-    <StyledTextField htmlFor={id} {...(error && { className: "error" })}>
-      <Lock sx={{ width: 20 }} />
+    <StyledTextField
+      htmlFor={id}
+      className={[isFocus && "focused", error && "error"].join(" ")}
+    >
+      <Lock sx={{ width: 20 }} color="primary" />
       <Box
         width="100%"
         marginLeft={2}
@@ -141,16 +146,27 @@ export const PasswordTextField = ({
         flexDirection="column"
       >
         {label && <span className="label">{label}</span>}
-        <input id={id} type={visibility ? "text" : "password"} {...props} />
+        <input
+          id={id}
+          type={visibility ? "text" : "password"}
+          onBlur={(e) => {
+            if (onBlur) onBlur(e);
+            setIsFocus(false);
+          }}
+          onFocus={() => {
+            setIsFocus(true);
+          }}
+          {...props}
+        />
       </Box>
       <IconButton
         onClick={() => setVisibility(!visibility)}
         sx={{ width: 28, height: 28 }}
       >
         {visibility ? (
-          <VisibilityOff sx={{ width: 20 }} />
+          <VisibilityOff sx={{ width: 20 }} color="primary" />
         ) : (
-          <Visibility sx={{ width: 20 }} />
+          <Visibility sx={{ width: 20 }} color="primary" />
         )}
       </IconButton>
     </StyledTextField>

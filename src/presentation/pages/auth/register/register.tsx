@@ -18,18 +18,26 @@ import { DefaultText, RouteName } from "../../../utils";
 
 import { registrationFormValidation } from "./register.validation";
 import { GoogleLogo } from "../../../components/svgs";
-import { emailAndPasswordRegistration, googleSignIn } from "../../../../store/store";
+import {
+  emailAndPasswordRegistration,
+  googleSignIn,
+} from "../../../../store/store";
 
 const RegisterSection = styled("section")(({ theme }) => ({
   "& h2": {
     fontSize: 24,
+    color: theme.palette.primary.main,
     fontWeight: theme.typography.fontWeightBold,
 
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down("md")]: {
       fontSize: 18,
-      textAlign: 'center',
+      textAlign: "center",
       marginBottom: 8,
     },
+  },
+
+  "& .or-text": {
+    color: theme.palette.primary.light,
   },
 
   "& .login-link": {
@@ -43,32 +51,29 @@ const RegisterSection = styled("section")(({ theme }) => ({
 const RegisterPage = () => {
   const dispatch = useDispatch();
 
-  const {
-    handleSubmit,
-    values,
-    handleChange,
-    handleBlur,
-    touched,
-    errors,
-  } = useFormik({
-    initialValues: {
-      fullName: "",
-      email: "",
-      password: "",
-      repeat_password: "",
-    },
-    validationSchema: registrationFormValidation(),
-    onSubmit: async ({ email, password, fullName: displayName }) => {
-      dispatch(emailAndPasswordRegistration({ email, password, displayName }));
-    },
-  });
+  const { handleSubmit, values, handleChange, handleBlur, touched, errors } =
+    useFormik({
+      initialValues: {
+        fullName: "",
+        email: "",
+        password: "",
+        repeat_password: "",
+      },
+      validationSchema: registrationFormValidation(),
+      onSubmit: async ({ email, password, fullName: displayName }) => {
+        dispatch(
+          emailAndPasswordRegistration({ email, password, displayName })
+        );
+      },
+    });
 
   return (
     <RegisterSection>
       <Typography component="h2">Register</Typography>
 
       <Typography variant="caption" marginTop={2}>
-        Hi, There! Register into {DefaultText.appName}, choosing one of the options bellow.
+        Hi, There! Register into {DefaultText.appName}, choosing one of the
+        options bellow.
       </Typography>
 
       <Box marginTop={4}>
@@ -80,7 +85,11 @@ const RegisterPage = () => {
         </SocialButton>
       </Box>
 
-      <Divider sx={{ marginTop: 3 }}>or</Divider>
+      <Divider sx={{ marginTop: 3 }}>
+        <Typography variant="subtitle2" component="span" className="or-text">
+          or
+        </Typography>
+      </Divider>
 
       <Box component="form" marginTop={4} onSubmit={handleSubmit}>
         <TextField
@@ -92,7 +101,7 @@ const RegisterPage = () => {
           onChange={handleChange}
           error={touched.fullName && !!errors.fullName}
           helperText={touched.fullName && errors.fullName}
-          startAdornment={<Person sx={{ width: 18 }} />}
+          startAdornment={<Person sx={{ width: 18 }} color="primary" />}
         />
 
         <Box marginTop={1}>
@@ -105,7 +114,7 @@ const RegisterPage = () => {
             onChange={handleChange}
             error={touched.email && !!errors.email}
             helperText={touched.email && errors.email}
-            startAdornment={<Email sx={{ width: 18 }} />}
+            startAdornment={<Email sx={{ width: 18 }} color="primary" />}
           />
         </Box>
 
@@ -141,7 +150,7 @@ const RegisterPage = () => {
       </Box>
 
       <Box marginTop={4} sx={{ textAlign: "center" }}>
-        <Typography variant="caption" component="p" className="login-link">
+        <Typography variant="caption" className="login-link">
           Already have an account? <Link to={RouteName.login}>Login</Link>
         </Typography>
       </Box>

@@ -20,6 +20,7 @@ import { emailAndPasswordSignIn, googleSignIn } from "../../../../store/store";
 const SigninSection = styled("section")(({ theme }) => ({
   "& h2": {
     fontSize: 24,
+    color: theme.palette.primary.main,
     fontWeight: theme.typography.fontWeightBold,
 
     [theme.breakpoints.down('md')]: {
@@ -27,6 +28,10 @@ const SigninSection = styled("section")(({ theme }) => ({
       marginBottom: 8,
       fontSize: 18,
     },
+  },
+
+  "& .or-text": {
+    color: theme.palette.primary.light,
   },
 
   "& form": {
@@ -62,7 +67,7 @@ const LoginPage = () => {
     <SigninSection>
       <Typography component="h2">Sign in</Typography>
 
-      <Typography variant="caption" component="p" marginTop={2}>
+      <Typography variant="caption" marginTop={2}>
         Welcome back! Sign in with your data that you entered during
         registration.
       </Typography>
@@ -76,7 +81,9 @@ const LoginPage = () => {
         </SocialButton>
       </Box>
 
-      <Divider sx={{ marginTop: 3 }}>or</Divider>
+      <Divider sx={{ marginTop: 3 }}>
+        <Typography variant="subtitle2" component="span" className="or-text">or</Typography>
+      </Divider>
 
       <Box component="form" marginTop={4} onSubmit={handleSubmit}>
         <TextField

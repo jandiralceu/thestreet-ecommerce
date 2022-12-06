@@ -9,7 +9,6 @@ import {
   Button,
   Card,
   Container,
-  Fab,
   Fade,
   Typography,
   useTheme,
@@ -38,6 +37,7 @@ import { selectCartInfo } from "../../../store/cart";
 import { selectCurrentUser } from "../../../store/auth";
 import { useEffect, useMemo } from "react";
 import { StripeElementStyle } from "@stripe/stripe-js";
+import { routeAnimationProps } from "../../utils";
 
 const CheckoutPage = () => {
   const stripe = useStripe();
@@ -57,7 +57,7 @@ const CheckoutPage = () => {
       invalid: {
         color: theme.palette.error.main,
       },
-    }
+    };
   }, [theme]);
 
   const paymentHandler = async () => {
@@ -134,7 +134,7 @@ const CheckoutPage = () => {
   }, [elements, values.paymentMethod, customStripeStyles]);
 
   return (
-    <CheckoutFormContainer onSubmit={handleSubmit}>
+    <CheckoutFormContainer onSubmit={handleSubmit} {...routeAnimationProps}>
       <Container sx={{ textAlign: "center" }}>
         <AppLogo />
       </Container>

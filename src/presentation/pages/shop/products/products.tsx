@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, styled, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
-import { RouteName } from "../../../utils";
+import { routeAnimationProps, RouteName } from "../../../utils";
 import { ProductCard } from "../../../components";
 import {
   selectCategories,
@@ -17,39 +17,9 @@ import {
   ProductRepository,
 } from "../../../../repositories";
 
-const ProductsContainer = styled(Box)(({ theme }) => ({
-  display: "flex",
-  gap: 20,
+import { ProductsContainer } from "./products.styles";
 
-  "& .filters": {
-    minWidth: 260,
 
-    "& h2": {
-      marginBottom: 12,
-      textTransform: "uppercase",
-      fontWeight: theme.typography.fontWeightBold,
-    },
-
-    "& .categories": {
-      marginTop: 20,
-
-      "& li:not(:last-of-type)": {
-        marginBottom: 8,
-      },
-    },
-  },
-
-  "& main": {
-    width: "100%",
-
-    "& .products": {
-      margin: "50px 0 0",
-      display: "grid",
-      gap: 24,
-      gridTemplateColumns: "repeat(4, 1fr)",
-    },
-  },
-}));
 
 const productService = new ProductService(new ProductRepository());
 
@@ -72,7 +42,7 @@ const ProductsPage = () => {
 
 
   return (
-    <ProductsContainer>
+    <ProductsContainer {...routeAnimationProps}>
       <Box component="section" className="filters">
         <Typography component="h2">Category</Typography>
 
