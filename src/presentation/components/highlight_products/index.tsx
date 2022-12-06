@@ -2,10 +2,18 @@ import { Box, BoxProps, styled, Typography } from "@mui/material";
 import { Product } from "../../../models";
 import { ProductCard } from "../product_card";
 
-const RelatedProducts = styled(Box)(() => ({
+const RelatedProducts = styled(Box)(({ theme }) => ({
   display: "grid",
   gap: 20,
   gridTemplateColumns: "repeat(4, 1fr)",
+
+  [theme.breakpoints.down('md')]: {
+    gridTemplateColumns: "repeat(2, 1fr)",
+  },
+
+  [theme.breakpoints.down('sm')]: {
+    gridTemplateColumns: "1fr",
+  },
 }));
 
 type HighlighProductsProps = {

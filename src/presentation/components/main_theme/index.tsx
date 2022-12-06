@@ -15,14 +15,19 @@ const MainThemeContainer = styled(Box)(() => ({
   minHeight: "100vh",
 }));
 
-const Container = styled(MuiContainer)(() => ({
-  '& .content': {
+const Container = styled(MuiContainer)(({ theme }) => ({
+  '&.content': {
+    marginTop: 20,
     minHeight: "100vh",
+
+    [theme.breakpoints.down('md')]: {
+      marginTop: 10,
+    },
   }
 }));
 
-const BreadcrumbsContainer = styled(Box)(() => ({
-  backgroundColor: '#fafafa',
+const BreadcrumbsContainer = styled(Box)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[100],
 }));
 
 export const MainTheme = () => {
@@ -56,7 +61,7 @@ export const MainTheme = () => {
       )}
 
       <Container maxWidth="lg" className="content">
-        <Box mt={8}>
+        <Box>
           <Outlet />
         </Box>
       </Container>

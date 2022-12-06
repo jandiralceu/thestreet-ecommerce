@@ -6,7 +6,7 @@ import { AppLogo } from "../../../components";
 import { DownloadApp } from "../components";
 import { routeAnimationProps } from "../../../utils";
 
-const currentYear = new Date().getFullYear;
+const currentYear = new Date().getFullYear();
 
 const AuthMainLayout = () => {
   return (
@@ -38,12 +38,11 @@ const AuthMainLayout = () => {
 
       <Typography className="all-rights-text">
         <>
-          &copy; {currentYear}
-          All rights reserved to
+          &copy; {currentYear}{" "}
           <ExternalLink href="https://jandir.co" target="_blank">
             Jandir Alceu
-          </ExternalLink>
-          .
+          </ExternalLink>,{" "}
+          All rights reserved.
         </>
       </Typography>
     </SectionContainer>

@@ -1,7 +1,7 @@
 import { styled } from "@mui/material";
 import { motion } from "framer-motion";
 
-export const Main = styled(motion.main)(() => ({
+export const Main = styled(motion.main)(({ theme }) => ({
   "& .hero": {
     display: "grid",
     height: "50vh",
@@ -12,8 +12,12 @@ export const Main = styled(motion.main)(() => ({
       `,
     gridTemplateColumns: "2fr 1fr",
 
+    [theme.breakpoints.down('md')]: {
+      display:'flex',
+    },
+
     "& a": {
-      backgroundColor: "#f3f3f3",
+      backgroundColor: theme.palette.grey[100],
 
       "&.area1": {
         gridArea: "highlight1",
@@ -21,6 +25,9 @@ export const Main = styled(motion.main)(() => ({
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundPosition: "center center",
+        [theme.breakpoints.down('md')]: {
+          flex: 1,
+        },
       },
 
       "&.area2": {
@@ -29,6 +36,10 @@ export const Main = styled(motion.main)(() => ({
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundPosition: "center center",
+
+        [theme.breakpoints.down('md')]: {
+          display:'none',
+        },
       },
 
       "&.area3": {
@@ -37,13 +48,37 @@ export const Main = styled(motion.main)(() => ({
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundPosition: "center center",
+
+        [theme.breakpoints.down('md')]: {
+          display:'none',
+        },
       },
     },
   },
 
   "& .welcome": {
+    margin: '100px 0',
+
+    [theme.breakpoints.down('sm')]: {
+      margin: '80px 0',
+    },
+
+    "& h4": {
+      textTransform: 'uppercase',
+
+      [theme.breakpoints.down('sm')]: {
+        fontSize: 26,
+      },
+    },
     "& p": {
+      marginTop: 10,
       width: "60%",
+      textAlign: 'center',
+
+      [theme.breakpoints.down('sm')]: {
+        width: "100%",
+        padding: '0 6px',
+      },
     },
   },
 }));

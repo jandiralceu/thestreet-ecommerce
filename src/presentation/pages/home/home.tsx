@@ -35,14 +35,13 @@ const HomePage = () => {
         justifyContent="center"
         alignItems="center"
         flexDirection="column"
-        marginY={14}
         component="section"
         className="welcome"
       >
-        <Typography variant="h4" sx={{ textTransform: "uppercase" }}>
+        <Typography component="h4" variant="h4">
           Welcome
         </Typography>
-        <Typography component="p" sx={{ marginTop: 2, textAlign: "center" }}>
+        <Typography>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste ipsam
           veniam quidem. Sapiente, molestias. Nihil voluptate omnis quidem.
         </Typography>

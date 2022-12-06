@@ -22,7 +22,6 @@ export const SectionContainer = styled(motion.section)(({ theme }) => ({
     fontSize: 12,
 
     "& a": {
-      marginLeft: 4,
       color: theme.palette.primary.light,
     },
   },

@@ -1,30 +1,13 @@
-import { Box, Container, styled, Typography } from "@mui/material";
-import { DefaultText } from "../../utils";
+import {
+  Box,
+  Container,
+  Typography,
+  Link as ExternalLink,
+} from "@mui/material";
 
-const StyledFooter = styled("footer")(() => ({
-  marginTop: 200,
-  // '& nav': {},
-  "& nav": {
-    padding: "20px 0",
-    borderTop: "1px solid #ccc",
-    borderBottom: "1px solid #ccc",
+import { StyledFooter } from "./footer.styles";
 
-    "& .menu": {
-      display: "grid",
-      gap: 24,
-      gridTemplateColumns: "repeat(4, 1fr)",
-
-      "& h5": {
-        textTransform: "uppercase",
-        marginBottom: 24,
-      },
-
-      "& ul": {
-        fontSize: 14,
-      },
-    },
-  },
-}));
+const currentYear = new Date().getFullYear();
 
 export const Footer = () => {
   return (
@@ -76,10 +59,16 @@ export const Footer = () => {
           </Box>
         </Container>
       </nav>
-      <Container sx={{ padding: "10px 0" }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
+      <Container>
+        <Box className="all-rights-text">
           <Typography variant="caption">
-          ©{new Date().getFullYear()} {DefaultText.appName}. All Right Reserved.
+            <>
+              &copy; {currentYear}{" "}
+              <ExternalLink href="https://jandir.co" target="_blank">
+                Jandir Alceu
+              </ExternalLink>
+              , All rights reserved.
+            </>
           </Typography>
         </Box>
       </Container>
