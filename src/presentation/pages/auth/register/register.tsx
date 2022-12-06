@@ -27,6 +27,8 @@ const RegisterSection = styled("section")(({ theme }) => ({
 
     [theme.breakpoints.down('md')]: {
       fontSize: 18,
+      textAlign: 'center',
+      marginBottom: 8,
     },
   },
 

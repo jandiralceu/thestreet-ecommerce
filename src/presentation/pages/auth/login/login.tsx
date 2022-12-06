@@ -23,6 +23,8 @@ const SigninSection = styled("section")(({ theme }) => ({
     fontWeight: theme.typography.fontWeightBold,
 
     [theme.breakpoints.down('md')]: {
+      textAlign: 'center',
+      marginBottom: 8,
       fontSize: 18,
     },
   },

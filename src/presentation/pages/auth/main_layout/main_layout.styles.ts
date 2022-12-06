@@ -13,7 +13,7 @@ export const SectionContainer = styled("section")(({ theme }) => ({
   },
 
   "& .all-rights-text": {
-    margin: '20px 0',
+    margin: '20px',
     fontSize: 12,
   },
 }));
@@ -36,6 +36,7 @@ export const CardContainer = styled(Card)(({ theme }) => ({
 
     [theme.breakpoints.down('md')]: {
       display: "none",
+      margin: '0 10px',
     },
   },
 
