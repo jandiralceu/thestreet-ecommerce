@@ -21,6 +21,10 @@ const SigninSection = styled("section")(({ theme }) => ({
   "& h2": {
     fontSize: 24,
     fontWeight: theme.typography.fontWeightBold,
+
+    [theme.breakpoints.down('md')]: {
+      fontSize: 18,
+    },
   },
 
   "& form": {

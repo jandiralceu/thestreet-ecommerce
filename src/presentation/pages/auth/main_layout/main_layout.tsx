@@ -12,7 +12,7 @@ const AuthMainLayout = () => {
         <AppLogo />
       </Box>
 
-      <CardContainer className="auth-container">
+      <CardContainer>
         <Box
           paddingY={6}
           className="cover-container"

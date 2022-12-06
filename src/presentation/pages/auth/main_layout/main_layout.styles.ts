@@ -8,34 +8,43 @@ export const SectionContainer = styled("section")(({ theme }) => ({
   flexDirection: "column",
   backgroundColor: theme.palette.grey[200],
 
+  [theme.breakpoints.down('md')]: {
+    padding: '0 20px',
+  },
+
   "& .all-rights-text": {
-    marginTop: 20,
+    margin: '20px 0',
     fontSize: 12,
   },
 }));
 
 export const CardContainer = styled(Card)(({ theme }) => ({
-  width: "860px",
+  width: 860,
   display: "grid",
   gridTemplateColumns: "repeat(2, 1fr)",
 
+  [theme.breakpoints.down('md')]: {
+    gridTemplateColumns: "1fr",
+    width: "100%",
+  },
+
   "& .cover-container": {
-    backgroundColor: theme.palette.primary.light,
-    minHeight: "100%",
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-end",
+    backgroundColor: theme.palette.primary.light,
 
-    "& .cover": {
-      "& img": {
-        width: "100%",
-      },
+    [theme.breakpoints.down('md')]: {
+      display: "none",
     },
   },
 
   "& main": {
-    minHeight: "100%",
-    padding: "60px",
+    padding: 60,
     backgroundColor: "#fff",
+
+    [theme.breakpoints.down('md')]: {
+      padding: 20,
+    },
   },
 }));
