@@ -7,7 +7,7 @@ import HomePage from "../presentation/pages/home/home";
 import ShopPage from "../presentation/pages/shop/shop";
 
 import { MainTheme } from "../presentation/components";
-import { lazy } from "react";
+import { lazy, useEffect } from "react";
 
 const AuthPage = lazy(() => import("../presentation/pages/auth/auth"));
 const CartPage = lazy(() => import("../presentation/pages/cart/cart"));
@@ -21,6 +21,10 @@ const PageNotFound = lazy(
 
 export const AnimatedRoutes = () => {
   const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname])
 
   return (
     <AnimatePresence>
