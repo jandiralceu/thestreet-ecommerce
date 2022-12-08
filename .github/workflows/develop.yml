@@ -10,5 +10,5 @@ jobs:
       name: "develop"
     steps:
       - uses: actions/checkout@v3
-      - name: Installing Dependencies
-        run: ⏳ yarn install
+      - name: ⏳ Installing Dependencies
+        run: yarn install
