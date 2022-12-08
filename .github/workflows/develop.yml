@@ -1,0 +1,14 @@
+name: the_street_ecommerce_develop
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  lint_and_testing:
+    runs-on: ubuntu-22.04
+    environment:
+      name: "develop"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Installing Dependencies
+        run: ⏳ yarn install
