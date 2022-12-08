@@ -9,6 +9,6 @@ jobs:
     environment:
       name: "develop"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Installing Dependencies
         run: ⏳ yarn install
