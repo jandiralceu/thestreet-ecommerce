@@ -87,6 +87,7 @@ const ProductDetailsPage = () => {
           </Box>
 
           <Box
+            className="highlight-image"
             sx={{
               backgroundImage: `url(${product.imageUrl})`,
               backgroundRepeat: "no-repeat",

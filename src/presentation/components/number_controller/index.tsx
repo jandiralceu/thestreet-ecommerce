@@ -11,16 +11,24 @@ type NumberControllerProps = {
   value: number;
 };
 
-const NumberControllerContainer = styled(Box)(() => ({
+const NumberControllerContainer = styled(Box)(({ theme }) => ({
   height: 48,
   display: "flex",
   alignItems: "center",
-  border: "1px solid #ccc",
+  border: `1px solid ${theme.palette.grey[300]}`,
   width: 190,
+
+  [theme.breakpoints.down("md")]: {
+    width: 150,
+  },
 
   "& .label": {
     marginLeft: 10,
     width: "auto",
+
+    [theme.breakpoints.down("md")]: {
+      fontSize: 12,
+    },
   },
 
   "& .control-quantity": {
@@ -28,6 +36,10 @@ const NumberControllerContainer = styled(Box)(() => ({
     alignItems: "center",
     margin: "0 10px",
     width: 40,
+
+    [theme.breakpoints.down("md")]: {
+      width: 20,
+    },
   },
 }));
 

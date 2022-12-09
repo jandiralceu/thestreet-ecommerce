@@ -42,6 +42,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     {
       maxWidth: "lg",
       hideControls: true,
+      fullScreen: true,
       content: (
         <BoxModal>
           <Box

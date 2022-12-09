@@ -27,7 +27,7 @@ export const Container = styled(Link)(({ theme }) => ({
   },
 }));
 
-export const QuickLookButton = styled("button")(() => ({
+export const QuickLookButton = styled("button")(({ theme }) => ({
   margin: 0,
   border: "none",
   backgroundColor: "#000",
@@ -39,18 +39,30 @@ export const QuickLookButton = styled("button")(() => ({
   cursor: "pointer",
   transition: 'opacity 0.3s ease-in',
 
+  [theme.breakpoints.down("md")]: {
+    display: 'none'
+  },
+
   "& span": {
     marginRight: 8,
     fontSize: 12,
   },
 }));
 
-export const BoxModal = styled(Box)(() => ({
+export const BoxModal = styled(Box)(({ theme }) => ({
   display: "grid",
   height: "50vh",
   flexDirection: "row",
   width: 1024,
   gridTemplateColumns: "repeat(2, 50%)",
+
+  [theme.breakpoints.down("lg")]: {
+    width: 900,
+  },
+
+  [theme.breakpoints.down("md")]: {
+    width: 700,
+  },
 
   "& .modal-product-image": {
     width: "100%",
