@@ -1,4 +1,4 @@
-import { styled } from "@mui/material";
+import { styled, Drawer as MuiDrawer } from "@mui/material";
 
 export const LogoutButton = styled("button")(() => ({
   border: "none",
@@ -53,9 +53,9 @@ export const StyledNavbar = styled("nav")(({ theme }) => ({
         },
       },
       "&.mobile-menu-option": {
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
+        cursor: "pointer",
+        display: "flex",
+        alignItems: "center",
 
         "& span": {
           fontSize: 20,
@@ -99,5 +99,16 @@ export const StyledNavbar = styled("nav")(({ theme }) => ({
         },
       },
     },
+  },
+}));
+
+export const MenuButton = styled("button")(({ theme }) => ({
+  border: "none",
+  backgroundColor: "transparent",
+}));
+
+export const Drawer = styled(MuiDrawer)(({ theme }) => ({
+  '& ul': {
+    width: '70vw',
   },
 }));

@@ -13,12 +13,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectCartInfo } from "../../../store/cart/cart.selector";
 import { selectAuthenticated, signOut } from "../../../store/auth";
 
-import { StyledNavbar, LogoutButton } from "./navbar.styles";
+import {
+  StyledNavbar,
+  LogoutButton,
+  MenuButton,
+  Drawer,
+} from "./navbar.styles";
+import { useState } from "react";
 
 export const Navbar = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectAuthenticated);
   const { isEmpty, itemsQuantity } = useSelector(selectCartInfo);
+  const [toggleDrawer, setToggleDrawer] = useState(false);
 
   return (
     <StyledNavbar>
@@ -80,11 +87,24 @@ export const Navbar = () => {
           )}
 
           <li className="mobile-menu-option">
-            <Typography component="span">MENU</Typography>
-            <Menu sx={{ width: 40, height: 40 }} color="primary" />
+            <MenuButton onClick={() => setToggleDrawer(true)}>
+              <Menu sx={{ width: 40, height: 40 }} color="primary" />
+            </MenuButton>
           </li>
         </ul>
       </Box>
+
+      <Drawer anchor="right" open={toggleDrawer} onClose={() => setToggleDrawer(false)}>
+        <ul>
+          <li>
+            <Link to={RouteName.home}>Home</Link>
+          </li>
+
+          <li>
+            <Link to={RouteName.shop}>Shop</Link>
+          </li>
+        </ul>
+      </Drawer>
     </StyledNavbar>
   );
 };
